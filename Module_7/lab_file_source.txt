@@ -1,0 +1,32 @@
+1. Check connector plugins 
+
+curl http://localhost:8083/connector-plugins
+
+2. Check connectors
+
+curl  http://localhost:8083/connectors
+
+3. Create a connector 
+
+curl -X POST -H 'Content-Type: application/json' -d @file-source-connector.json http://localhost:8083/connectors
+
+5. Check the status
+
+curl http://localhost:8083/connectors/file-source-connector/status
+
+6. Add the data to the file ./zk/connect/test.txt
+
+a1
+a2
+a3
+
+6. Check the messages
+
+./kafka-console-consumer --bootstrap-server localhost:9092 --topic connect-file-source-test --from-beginning --group lab1
+
+7. Add more data to the file ./zk/connect/test.txt
+
+a4
+a5
+  
+8. Check the messages

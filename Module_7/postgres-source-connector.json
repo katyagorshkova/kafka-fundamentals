@@ -1,0 +1,15 @@
+{ "name": "jdbc-source-connector", 
+  "config": 
+    {"connector.class": "JdbcSource", 
+     "tasks.max": 1,
+     "topic.prefix": "connect-jdbc-",
+     "connection.url": "jdbc:postgresql://x.x.x.x:5432/testdb",
+     "mode": "incrementing", 
+     "incrementing.column.name":"id",
+     "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+     "value.converter.schemas.enable":"true", 
+     "table.whitelist" : "public.simple_table",
+     "connection.user": "postgres", 
+     "connection.password" : "xxxxxxx"
+    }
+}    
