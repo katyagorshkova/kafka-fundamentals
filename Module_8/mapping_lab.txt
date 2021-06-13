@@ -1,0 +1,20 @@
+1. Create two topics:
+
+ ./kafka-topics --create --bootstrap-server localhost:9092 --topic TextLinesTopic --partitions 10
+ 
+ ./kafka-topics --create --bootstrap-server localhost:9092 --topic UppercasedTextLinesTopic --partitions 10
+ 
+2. Run examples.streams.MapFunctionLambdaExample
+
+  The application must be running
+  
+3. Run examples.streams.MapFunctionLambdaDriver or
+
+  produce some values with the console producer
+  
+  /kafka-console-producer --bootstrap-server localhost:9092 --topic TextLinesTopic
+  
+4. Check the topic UppercasedTextLinesTopic
+
+
+

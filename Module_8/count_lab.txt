@@ -1,0 +1,15 @@
+1. Create two topics:
+
+ ./kafka-topics --create --bootstrap-server localhost:9092 --topic Numbers --partitions 10
+ 
+ ./kafka-topics --create --bootstrap-server localhost:9092 --topic CountedNumbers --partitions 10
+ 
+ 
+2. Run examples.streams.CountNumbersExample
+
+  The application must be running
+  
+3. Run examples.streams.CountNumbersExampleDriver
+
+
+4. Check the topic CountedNumbers

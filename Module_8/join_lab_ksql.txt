@@ -1,0 +1,32 @@
+ 1. Create topic:
+ 
+ ./kafka-topics --create --bootstrap-server localhost:9092 --topic RightLines --partitions 10
+ 
+ 
+ 2. In kSQL 
+ 
+ CREATE TABLE SimpleLinesT as SELECT attr1, count(*) as cnt FROM SimpleLines GROUP BY attr1 EMIT CHANGES;
+ 
+ Select * from SimpleLinesT EMIT CHANGES;
+ 
+ CREATE stream RightLines (attr3 VARCHAR, attr4 VARCHAR) WITH (KAFKA_TOPIC='RightLines', VALUE_FORMAT='JSON');
+  
+ SELECT s.attr1, s.cnt, n.attr4 FROM RightLines n JOIN SimpleLinesT s ON s.attr1 = n.attr3 emit changes;
+ 
+ 
+ 3. Run Console Producer
+ ./kafka-console-producer --topic RightLines --bootstrap-server localhost:9092 --property parse.key=true --property key.separator=, --property value.serializer=custom.class.serialization.JsonSerializer
+ 
+
+Produce Values
+ 
+a, {"attr3":"a","attr4": "joined_a1"}
+a, {"attr3":"a","attr4": "joined_a2"}
+b, {"attr3":"a","attr4": "joined_a3"}
+ 
+b, {"attr3":"b","attr4": "joined_b1"}
+b, {"attr3":"b","attr4": "joined_b2"}
+b, {"attr3":"b","attr4": "joined_b3"}
+b, {"attr3":"b","attr4": "joined_b4"}
+ 
+4. Check KSQL Console

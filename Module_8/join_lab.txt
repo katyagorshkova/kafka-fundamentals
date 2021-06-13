@@ -1,0 +1,18 @@
+1. Create two topics:
+
+ ./kafka-topics --create --bootstrap-server localhost:9092 --topic LeftStreamTopic --partitions 10
+ 
+ ./kafka-topics --create --bootstrap-server localhost:9092 --topic RightStreamTopic --partitions 10
+
+ ./kafka-topics --create --bootstrap-server localhost:9092 --topic JoinedTopic --partitions 10
+
+
+2. Run examples.streams.JoinStringsExample
+  
+  The application must be running
+  
+  
+3. Run JoinedStringExampleDriver. This will generate values into LeftStreamTopic and RightStreamTopic
+
+
+4. Check the topic JoinedTopic

@@ -1,0 +1,27 @@
+1. Create topic:
+
+ ./kafka-topics --create --bootstrap-server localhost:9092 --topic SimpleLines --partitions 10
+ 
+
+2. Run the commands inside KSQL
+
+
+CREATE STREAM SimpleLines (attr1 VARCHAR) WITH (KAFKA_TOPIC='SimpleLines', VALUE_FORMAT='JSON');
+
+SELECT attr1, count(*) as cnt FROM SimpleLines GROUP BY attr1 EMIT CHANGES;
+
+
+3. Produce some number values into SimpleLines topic 
+
+./kafka-console-producer --topic SimpleLines --bootstrap-server localhost:9092 --property parse.key=true --property key.separator=, --property value.serializer=custom.class.serialization.JsonSerializer 
+
+a,{"attr1":"a"} 
+a,{"attr1":"a"} 
+a,{"attr1":"a"} 
+b,{"attr1":"b"}  
+b,{"attr1":"b"} 
+b,{"attr1":"b"}  
+a,{"attr1":"a"} 
+a,{"attr1":"a"}  
+
+4. Check KSQL Console
