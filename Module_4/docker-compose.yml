@@ -22,28 +22,50 @@ services:
     container_name: kafka1
     ports:
       - "9092:9092"
-      - "7071:7071"
     environment:
       KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka1:19092,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_ZOOKEEPER_CONNECT: "zoo1:2181"
       KAFKA_BROKER_ID: 1
       KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
-      KAFKA_OPTS: "-javaagent:/usr/app/jmx_exporter/jmx_prometheus_javaagent.jar=7071:/usr/app/jmx_exporter/prom-jmx-agent-config.yml"
+      KAFKA_JMX_PORT: 9101
       KAFKA_JMX_HOSTNAME: kafka1
     volumes:
       - ./zk/kafka1/data:/var/lib/kafka/data
-      - ./jmx_exporter:/usr/app/jmx_exporter/
     depends_on:
       - zoo1
 
-  prometheus:
-    image: prom/prometheus:v2.24.1
-    hostname: prom
-    container_name: prom
+  kafkasr:
+    image: confluentinc/cp-schema-registry:6.2.0
+    hostname: kafkasr
+    container_name: kafkasr
     restart: always
     ports:
-      - 9090:9090/tcp
-    volumes:
-      - ./prometheus:/etc/prometheus
+      - 8081:8081
+    depends_on:
+      - zoo1
+      - kafka1
+    environment:
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: "kafka1:19092"
+      SCHEMA_REGISTRY_HOST_NAME: kafkasr
+      SCHEMA_REGISTRY_LISTENERS: "http://0.0.0.0:8081"
+      SCHEMA_REGISTRY_LOG4J_ROOT_LOGLEVEL: INFO
+
+  restproxy:
+    image: confluentinc/cp-kafka-rest:6.2.0
+    hostname: krest
+    container_name: krest
+    restart: always
+    ports:
+      - 8082:8082
+    depends_on:
+      - zoo1
+      - kafka1
+      - kafkasr
+    environment:
+      KAFKA_REST_HOST_NAME: krest
+      KAFKA_REST_BOOTSTRAP_SERVERS: 'kafka1:19092'
+      KAFKA_REST_LISTENERS: "http://0.0.0.0:8082"
+      KAFKA_REST_SCHEMA_REGISTRY_URL: 'http://kafkasr:8081'

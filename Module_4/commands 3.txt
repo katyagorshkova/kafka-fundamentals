@@ -1,0 +1,145 @@
+
+
+2. Send message
+curl  -X POST -H "Content-Type: application/vnd.kafka.json.v2+json" -H "Accept: application/vnd.kafka.v2+json"  --data '{"records":[{"value":{"foo":"bar"}}]}' "http://localhost:8082/topics/jsontest"
+ 
+3. Create a group
+
+curl -X POST -H "Content-Type: application/vnd.kafka.v2+json"  --data '{"name": "myconsumer1", "format": "json", "auto.offset.reset": "earliest"}'   http://localhost:8082/consumers/mygroup
+
+4. Create subscription
+curl -X POST -H "Content-Type: application/vnd.kafka.v2+json" --data '{"topics":["jsontest"]}' http://localhost:8082/consumers/mygroup/instances/myconsumer1/subscription
+
+
+5. Get messages
+curl -X GET  -H "Accept: application/vnd.kafka.json.v2+json" http://localhost:8082/consumers/mygroup/instances/myconsumer1/records 
+
+6. Delete consumer group 
+
+
+curl -X DELETE  -H "Content-Type: application/vnd.kafka.v2+json"  http://localhost:8082/consumers/mygroup/instances/myconsumer1
+
+7. Produce a message in Avro
+
+curl -X POST   -H "Content-Type: application/vnd.kafka.avro.v2+json"  -H "Accept: application/vnd.kafka.v2+json" \
+     --data '{"value_schema": "{\"type\": \"record\", \"name\": \"User\", \"fields\": [{\"name\": \"name\", \"type\": \"string\"}]}", "records": [{"value": {"name": "testUser"}}]}'  "http://localhost:8082/topics/avrotest"
+
+8. Produce a message in Avro with a key
+
+curl -X POST  -H "Content-Type: application/vnd.kafka.avro.v2+json"   -H "Accept: application/vnd.kafka.v2+json"   --data '{"key_schema": "{\"name\":\"user_id\"  ,\"type\": \"int\"   }", "value_schema": "{\"type\": \"record\", \"name\": \"User\", \"fields\": [{\"name\": \"name\", \"type\": \"string\"}]}", "records": [{"key" : 1 , "value": {"name": "testUser"}}]}'   "http://localhost:8082/topics/avrokeytest2"
+
+9. Create a consumer with avro
+
+curl -X POST -H "Content-Type: application/vnd.kafka.v2+json"  --data '{"name": "my_consumer_instance", "format": "avro", "auto.offset.reset": "earliest"}'  http://localhost:8082/consumers/my_avro_consumers
+
+curl -X POST  -H "Content-Type: application/vnd.kafka.v2+json"  --data '{"topics":["avrotest"]}' http://localhost:8082/consumers/my_avro_consumers/instances/my_consumer_instance/subscription
+
+
+curl -X GET -H "Accept: application/vnd.kafka.avro.v2+json"  http://localhost:8082/consumers/my_avro_consumers/instances/my_consumer_instance/records
+
+curl -X DELETE  -H "Content-Type: application/vnd.kafka.v2+json"  http://localhost:8082/consumers/my_avro_consumers/instances/my_consumer_instance/
+
+10. Create a consumer for protobuf
+
+curl -X POST  -H "Content-Type: application/vnd.kafka.protobuf.v2+json"  -H "Accept: application/vnd.kafka.v2+json"  --data '{"value_schema": "syntax=\"proto3\"; message User { string name = 1; }", "records": [{"value": {"name": "testUser"}}]}' "http://localhost:8082/topics/protobuftest"
+
+
+curl -X POST -H "Content-Type: application/vnd.kafka.protobuf.v2+json" --data '{"name": "my_consumer_instance", "format": "protobuf", "auto.offset.reset": "earliest"}'  http://localhost:8082/consumers/my_protobuf_consumer
+
+curl -X POST  -H "Content-Type: application/vnd.kafka.protobuf.v2+json"  --data '{"topics":["protobuftest"]}'  http://localhost:8082/consumers/my_protobuf_consumer/instances/my_consumer_instance/subscription
+
+curl -X GET  -H "Accept: application/vnd.kafka.protobuf.v2+json" http://localhost:8082/consumers/my_protobuf_consumer/instances/my_consumer_instance/records
+
+curl -X DELETE -H "Content-Type: application/vnd.kafka.protobuf.v2+json"  http://localhost:8082/consumers/my_protobuf_consumer/instances/my_consumer_instance
+
+11. Work with JSON
+
+curl -X POST -H "Content-Type: application/vnd.kafka.jsonschema.v2+json" -H "Accept: application/vnd.kafka.v2+json"  --data '{"value_schema": "{\"type\":\"object\", \"properties\":{\"name\":{\"type\":\"string\"}}}","records": [{"value": {"name": "testUser"}}]}' "http://localhost:8082/topics/jsonschematest"
+
+
+curl -X POST -H "Content-Type: application/vnd.kafka.jsonschema.v2+json" --data '{"name": "my_consumer_instance", "format": "jsonschema", "auto.offset.reset": "earliest"}'  http://localhost:8082/consumers/my_jsonschema_consumer
+
+
+curl -X POST -H "Content-Type: application/vnd.kafka.jsonschema.v2+json" --data '{"topics":["jsonschematest"]}'  http://localhost:8082/consumers/my_jsonschema_consumer/instances/my_consumer_instance/subscription
+
+curl -X GET -H "Accept: application/vnd.kafka.jsonschema.v2+json" http://localhost:8082/consumers/my_jsonschema_consumer/instances/my_consumer_instance/records
+
+
+curl -X DELETE -H "Content-Type: application/vnd.kafka.jsonschema.v2+json"  http://localhost:8082/consumers/my_jsonschema_consumer/instances/my_consumer_instance
+
+14.	Get a list of topics
+
+curl "http://localhost:8082/topics"
+
+15. Get info about one topic 
+
+curl "http://localhost:8082/topics/avrotest"
+
+16. Get info about topic partitions
+
+curl "http://localhost:8082/topics/avrotest/partitions"
+
+-----------------
+
+1. Register a schema for key
+
+curl -X POST  -H "Content-Type: application/vnd.schemaregistry.v1+json" --data '{"schema": "{\"type\": \"string\"}"}'  http://localhost:8081/subjects/Kafka-key/versions
+
+
+2. Register a  schema for value
+
+curl -X POST -H "Content-Type: application/vnd.schemaregistry.v1+json" --data '{"schema": "{\"type\": \"string\"}"}'  http://localhost:8081/subjects/Kafka-value/versions
+
+
+3. List subjects
+
+curl -X GET http://localhost:8081/subjects
+
+4. List the version of the Kafka-value
+
+curl -X GET http://localhost:8081/subjects/Kafka-value/versions
+
+5. Fetch a schema by globally unique id 1
+
+curl -X GET http://localhost:8081/schemas/ids/1
+
+6. Fetch version 1 of the schema registered under subject "Kafka-value"
+
+curl -X GET http://localhost:8081/subjects/Kafka-value/versions/1
+
+
+7.	Fetch the most recently registered schema under subject "Kafka-value"
+
+curl -X GET http://localhost:8081/subjects/Kafka-value/versions/latest
+ 
+8. Delete 
+
+curl -X DELETE http://localhost:8081/subjects/Kafka-value/versions/2
+
+9. Delete all
+
+curl -X DELETE http://localhost:8081/subjects/Kafka-value
+
+10. Check whether a schema has been registered under subject "Kafka-key"
+
+curl -X POST -H "Content-Type: application/vnd.schemaregistry.v1+json"  --data '{"schema": "{\"type\": \"string\"}"}'  http://localhost:8081/subjects/Kafka-key
+
+11. Test compatibility of a schema with the latest schema under subject "Kafka-value"
+
+curl -X POST -H "Content-Type: application/vnd.schemaregistry.v1+json" --data '{"schema": "{\"type\": \"string\"}"}'  http://localhost:8081/compatibility/subjects/Kafka-value/versions/latest
+
+12. Get top level config
+
+curl -X GET http://localhost:8081/config
+
+13.	Update compatibility requirements globally
+
+curl -X PUT -H "Content-Type: application/vnd.schemaregistry.v1+json" --data '{"compatibility": "BACKWARD"}'  http://localhost:8081/config
+
+14. 	Update compatibility requirements under the subject "Kafka-value"
+
+curl -X PUT -H "Content-Type: application/vnd.schemaregistry.v1+json"  --data '{"compatibility": "BACKWARD"}' http://localhost:8081/config/Kafka-value
+
+
+
+
