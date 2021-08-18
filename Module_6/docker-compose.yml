@@ -35,6 +35,7 @@ services:
       KAFKA_JMX_HOSTNAME: kafka1-m
     volumes:
       - ./zk/kafka1-m/data:/var/lib/kafka/data
+      - ./config:/tmp/config
     depends_on:
       - zoo1-m
 

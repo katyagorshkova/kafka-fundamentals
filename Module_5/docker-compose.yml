@@ -30,8 +30,10 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: "zoo1:2181"
       KAFKA_BROKER_ID: 1
       KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
-      KAFKA_OPTS: "-javaagent:/usr/app/jmx_exporter/jmx_prometheus_javaagent.jar=7071:/usr/app/jmx_exporter/prom-jmx-agent-config.yml"
+      #KAFKA_OPTS: "-javaagent:/usr/app/jmx_exporter/jmx_prometheus_javaagent.jar=7071:/usr/app/jmx_exporter/prom-jmx-agent-config.yml"
+      EXTRA_ARGS: "-javaagent:/usr/app/jmx_exporter/jmx_prometheus_javaagent.jar=7071:/usr/app/jmx_exporter/prom-jmx-agent-config.yml"
       KAFKA_JMX_HOSTNAME: kafka1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     volumes:
       - ./zk/kafka1/data:/var/lib/kafka/data
       - ./jmx_exporter:/usr/app/jmx_exporter/
