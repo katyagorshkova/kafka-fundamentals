@@ -22,7 +22,7 @@ a3
 
 6. Check the messages
 
-./kafka-console-consumer --bootstrap-server localhost:9092 --topic connect-file-source-test --from-beginning --group lab1
+docker exec -ti kafka1 /usr/bin/kafka-console-consumer --bootstrap-server kafka1:9092 --topic connect-file-source-test --from-beginning --group lab1
 
 7. Add more data to the file ./zk/connect/test.txt
 

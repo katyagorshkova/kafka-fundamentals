@@ -28,7 +28,7 @@ curl http://localhost:8083/connectors/file-sink-connector/status
 
 7. Produce the values
 
-./kafka-console-producer --topic connect-sink --bootstrap-server localhost:9092 
+docker exec -ti kafka1 /usr/bin/kafka-console-producer --topic connect-sink --bootstrap-server kafka1:19092 
 
 {"a1":"value1", "a2": "value2"}
 {"a1":"value4", "c2": "value3"}

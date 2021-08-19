@@ -28,7 +28,7 @@ curl http://localhost:8083/connectors/postgres-source-connector/status
 
 6. Check the messages
 
-./kafka-console-consumer --bootstrap-server localhost:9092 --topic connect-jdbc-simple_table --from-beginning --group lab1
+docker exec -ti kafka1 /usr/bin/kafka-console-consumer --bootstrap-server kafka1:19092 --topic connect-jdbc-simple_table --from-beginning --group lab1
 
 7. Add more data
 
