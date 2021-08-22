@@ -40,7 +40,7 @@ services:
       - zoo1
 
   ksqldb-server:
-    image: confluentinc/ksqldb-server:0.18.0
+    image: confluentinc/ksqldb-server:0.19.0
     hostname: ksqldb-server
     container_name: ksqldb-server
     depends_on:
@@ -61,7 +61,7 @@ services:
       
   ksqldb-cli:
     container_name: ksqldb-cli
-    image: confluentinc/cp-ksqldb-cli:6.2.0
+    image: confluentinc/ksqldb-cli:0.19.0
     depends_on:
       - ksqldb-server
     entrypoint: /bin/sh

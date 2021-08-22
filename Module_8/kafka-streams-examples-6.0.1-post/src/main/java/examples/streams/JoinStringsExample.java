@@ -38,7 +38,8 @@ public class JoinStringsExample {
 
 		streamsConfiguration.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
 		streamsConfiguration.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
-
+		streamsConfiguration.put(StreamsConfig.STATE_DIR_CONFIG, "/tmp/streams/");
+		
 		final StreamsBuilder builder = new StreamsBuilder();
 
 		final KStream<String, String> leftSource = builder.stream("LeftStreamTopic");

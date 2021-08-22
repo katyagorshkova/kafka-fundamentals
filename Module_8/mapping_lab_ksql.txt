@@ -1,16 +1,16 @@
 1. Create two topics:
 
- ./kafka-topics --create --bootstrap-server localhost:9092 --topic TextLinesTopic2 --partitions 10
+ docker exec -ti kafka1 /usr/bin/kafka-topics --create --bootstrap-server localhost:9092 --topic TextLinesTopic2 --partitions 10
  
- ./kafka-topics --create --bootstrap-server localhost:9092 --topic UppercasedTextLinesTopic2 --partitions 10
+ docker exec -ti kafka1 /usr/bin/kafka-topics --create --bootstrap-server localhost:9092 --topic UppercasedTextLinesTopic2 --partitions 10
  
 2. Produce some low-case values into TextLinesTopic2
 
-./kafka-console-producer --topic TextLinesTopic2 --bootstrap-server localhost:9092 
+docker exec -ti kafka1 /usr/bin/kafka-console-producer --topic TextLinesTopic2 --bootstrap-server kafka1:19092
 
 3. Run KSQL 
 
-docker-compose exec ksqldb-cli ksql  http://ksqldb-server:8088  
+docker  exec -ti ksqldb-cli ksql  http://ksqldb-server:8088  
 
 4. Run the commands inside KSQL
 

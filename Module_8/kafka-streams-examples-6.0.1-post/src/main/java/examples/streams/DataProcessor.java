@@ -53,7 +53,7 @@ public class DataProcessor implements Processor<String, String>{
                 // this means that the other value arrived first
                 // you have both the values now and can process the record
                 String newvalue = value.concat(" ").concat(kvStore.get(key));
-                process(key, newvalue);
+                processRecord(key, newvalue);
 
                 // remove the entry from the statestore (if any left or right record came first as an event)
                 kvStore.delete(key);

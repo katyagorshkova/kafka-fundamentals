@@ -1,32 +1,24 @@
- 1. Create topic:
+ 1. In KSQL
  
- ./kafka-topics --create --bootstrap-server localhost:9092 --topic RightLines --partitions 10
+CREATE STREAM LeftStreamTopic2 (id INT KEY, left_str VARCHAR, left_ts VARCHAR) WITH (KAFKA_TOPIC='LeftStreamTopic2', VALUE_FORMAT='JSON', TIMESTAMP='left_ts', TIMESTAMP_FORMAT='yyyy-MM-dd''T''HH:mm:ssX', PARTITIONS=4);
  
+CREATE STREAM RightStreamTopic2 (ID INT KEY, right_str VARCHAR, right_ts VARCHAR) WITH (KAFKA_TOPIC='RightStreamTopic2', VALUE_FORMAT='JSON', TIMESTAMP='right_ts', TIMESTAMP_FORMAT='yyyy-MM-dd''T''HH:mm:ssX', PARTITIONS=4);
  
- 2. In kSQL 
+ 2. Insert values
  
- CREATE TABLE SimpleLinesT as SELECT attr1, count(*) as cnt FROM SimpleLines GROUP BY attr1 EMIT CHANGES;
- 
- Select * from SimpleLinesT EMIT CHANGES;
- 
- CREATE stream RightLines (attr3 VARCHAR, attr4 VARCHAR) WITH (KAFKA_TOPIC='RightLines', VALUE_FORMAT='JSON');
-  
- SELECT s.attr1, s.cnt, n.attr4 FROM RightLines n JOIN SimpleLinesT s ON s.attr1 = n.attr3 emit changes;
- 
- 
- 3. Run Console Producer
- ./kafka-console-producer --topic RightLines --bootstrap-server localhost:9092 --property parse.key=true --property key.separator=, --property value.serializer=custom.class.serialization.JsonSerializer
+INSERT INTO LeftStreamTopic2 (id, left_ts, left_str) VALUES (1, '2019-03-29T06:01:18Z', 'number_one_left');
+INSERT INTO LeftStreamTopic2 (id, left_ts, left_str) VALUES (2, '2019-03-29T17:02:20Z', 'number_two_left');
+INSERT INTO LeftStreamTopic2 (id, left_ts, left_str) VALUES (3, '2019-03-29T13:44:10Z', 'number_three_left');
+INSERT INTO LeftStreamTopic2 (id, left_ts, left_str) VALUES (4, '2019-03-29T11:58:25Z', 'number_four_left');
  
 
-Produce Values
- 
-a, {"attr3":"a","attr4": "joined_a1"}
-a, {"attr3":"a","attr4": "joined_a2"}
-b, {"attr3":"a","attr4": "joined_a3"}
- 
-b, {"attr3":"b","attr4": "joined_b1"}
-b, {"attr3":"b","attr4": "joined_b2"}
-b, {"attr3":"b","attr4": "joined_b3"}
-b, {"attr3":"b","attr4": "joined_b4"}
- 
-4. Check KSQL Console
+3. Insert values
+
+INSERT INTO RightStreamTopic2 (id, right_ts, right_str) VALUES (1, '2019-03-31T18:13:39Z', 'number_one_right');
+INSERT INTO RightStreamTopic2 (id, right_ts, right_str) VALUES (2, '2019-03-31T02:04:13Z', 'number_two_right');
+INSERT INTO RightStreamTopic2 (id, right_ts, right_str) VALUES (3, '2019-03-31T20:47:09Z', 'number_three_right');
+
+
+4. 
+
+SELECT l.id AS left_id, l.left_str, r. right_str FROM LeftStreamTopic2 l INNER JOIN RightStreamTopic2 r WITHIN 7 DAYS ON l.id = r.id EMIT CHANGES;

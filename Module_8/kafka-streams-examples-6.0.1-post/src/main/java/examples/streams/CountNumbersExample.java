@@ -23,12 +23,13 @@ public class CountNumbersExample {
 
 		streamsConfiguration.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
 		streamsConfiguration.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
+		streamsConfiguration.put(StreamsConfig.STATE_DIR_CONFIG, "/tmp/streams/");
 
 		final StreamsBuilder builder = new StreamsBuilder();
 
 		final KStream<String, String> numbers = builder.stream("Numbers");
 
-//		numbers.groupByKey().count().to("CountedNumbers");
+		//numbers.groupByKey().count().to("CountedNumbers");
 		
 		numbers.groupByKey().count().mapValues(v->String.valueOf(v)).toStream().to("CountedNumbers");
 
