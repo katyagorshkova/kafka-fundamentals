@@ -1,0 +1,46 @@
+1. Login into  admin application http://localhost:8080
+2. Login as
+
+System: Postgresql
+Server: postgres
+Username: demo
+Password: demo
+Database: orders
+
+3. Enter SQL Command
+
+  insert into orders values(1,'a');
+  insert into orders values(2,'b');
+  insert into orders values(3,'c');
+  insert into orders values(4,'d');
+
+4. Check connector-plugins through control center or through
+
+curl http://localhost:8083/connector-plugins
+
+ 
+5. Add JDBC source connector
+
+Add configuration through Control Center. Connect -> Cluster -> JDBC Source Connector-> Upload connector config file. The configuration is in postgres-source-connector-1.json
+
+or through REST
+
+curl -X POST -H 'Content-Type: application/json' -d @postgres-source-connector-1.json http://localhost:8083/connectors
+
+
+6. Check connectors through Control center or through REST
+
+curl http://localhost:8083/connectors/jdbc-source-connector/status
+
+7. Check messages
+
+http://localhost:8000/
+
+8. Add more data 
+
+  insert into orders values(5,'e');
+  insert into orders values(6,'f');
+
+9. Check messages
+
+

@@ -3,13 +3,13 @@
     {"connector.class": "JdbcSource", 
      "tasks.max": 1,
      "topic.prefix": "connect-jdbc-",
-     "connection.url": "jdbc:postgresql://172.16.1.1:5432/testdb",
+     "connection.url": "jdbc:postgresql://postgres:5432/orders",
      "mode": "incrementing", 
      "incrementing.column.name":"id",
      "value.converter": "org.apache.kafka.connect.json.JsonConverter",
      "value.converter.schemas.enable":"true", 
-     "table.whitelist" : "public.simple_table",
-     "connection.user": "postgres", 
-     "connection.password" : "root"
+     "table.whitelist" : "public.orders",
+     "connection.user": "demo", 
+     "connection.password" : "demo"
     }
 }    
