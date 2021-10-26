@@ -95,7 +95,7 @@ services:
     ports:
     - 8000:8000
     depends_on:
-    - kafka-rest
+    - rest-proxy
     environment:
       KAFKA_REST_PROXY_URL: "http://rest-proxy:8082"
       PROXY: "true"
