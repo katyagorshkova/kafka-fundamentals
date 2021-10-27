@@ -8,7 +8,7 @@ import java.util.concurrent.ExecutionException;
 
 public class Ex37NoBatchNoRetryProducer {
     private final static String BOOTSTRAP_SERVERS = ":9092,:9093,:9094";
-    private final static String TOPIC = "events5";
+    private final static String TOPIC = "events6";
     private final static String CLIENT_ID = "ex37";
     public static void main(String[] args) {
         Properties props = new Properties();
@@ -25,7 +25,7 @@ public class Ex37NoBatchNoRetryProducer {
         try {
             for (int index = 1; index < 11; index++) {
                 final ProducerRecord<String, String> data = new ProducerRecord<>(TOPIC,
-                    index, null, "m" + index);
+                    null, "m" + index);
                 try {
                     RecordMetadata meta = producer.send(data).get();
                     System.out.printf("key=%s, value=%s => partition=%d, offset=%d\n",

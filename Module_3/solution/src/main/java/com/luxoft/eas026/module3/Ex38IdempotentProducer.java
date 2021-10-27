@@ -8,7 +8,7 @@ import java.util.concurrent.ExecutionException;
 
 public class Ex38IdempotentProducer {
     private final static String BOOTSTRAP_SERVERS = ":9092,:9093,:9094";
-    private final static String TOPIC = "events1";
+    private final static String TOPIC = "events5";
     private final static String CLIENT_ID = "ex37";
     public static void main(String[] args) {
         Properties props = new Properties();
@@ -22,11 +22,8 @@ public class Ex38IdempotentProducer {
                 StringSerializer.class.getName());
         
         props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, "true");
-        props.put(ProducerConfig.TRANSACTIONAL_ID_CONFIG, "prod-1");
         
         final Producer<String, String> producer = new KafkaProducer<>(props);
-        producer.initTransactions();
-        producer.beginTransaction();
         try {
             for (int index = 1; index < 4; index++) {
                 final ProducerRecord<String, String> data = new ProducerRecord<>(TOPIC,
@@ -39,7 +36,7 @@ public class Ex38IdempotentProducer {
                     System.out.printf("Exception %s\n", e.getMessage());
                 }
             }
-            producer.commitTransaction();
+            
         } finally {
             producer.flush();
             producer.close();
