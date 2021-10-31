@@ -11,10 +11,40 @@ services:
     environment:
         ZOO_MY_ID: 1
         ZOO_PORT: 2181
-        ZOO_SERVERS: server.1=zoo1:2888:3888;2181
+        ZOO_SERVERS: server.1=zoo1:2888:3888;2181 server.2=zoo2:2888:3888;2182 server.3=zoo3:2888:3888;2183
     volumes:
       - ./zk/zoo1/data:/data
       - ./zk/zoo1/datalog:/datalog
+
+  zoo2:
+    image: zookeeper:3.7.0
+    restart: always
+    hostname: zoo2
+    container_name: zoo2
+    ports:
+      - 2182:2182
+    environment:
+        ZOO_MY_ID: 2
+        ZOO_PORT: 2182
+        ZOO_SERVERS: server.1=zoo1:2888:3888;2181 server.2=zoo2:2888:3888;2182 server.3=zoo3:2888:3888;2183
+    volumes:
+      - ./zk/zoo2/data:/data
+      - ./zk/zoo2/datalog:/datalog
+
+  zoo3:
+    image: zookeeper:3.7.0
+    restart: always
+    hostname: zoo3
+    container_name: zoo3
+    ports:
+      - 2183:2183
+    environment:
+        ZOO_MY_ID: 3
+        ZOO_PORT: 2183
+        ZOO_SERVERS: server.1=zoo1:2888:3888;2181 server.2=zoo2:2888:3888;2182 server.3=zoo3:2888:3888;2183
+    volumes:
+      - ./zk/zoo3/data:/data
+      - ./zk/zoo3/datalog:/datalog
 
   kafka1:
     image: confluentinc/cp-kafka:6.2.1
@@ -27,18 +57,66 @@ services:
       KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka1:19092,LISTENER_DOCKER_EXTERNAL://localhost:9092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
-      KAFKA_ZOOKEEPER_CONNECT: "zoo1:2181"
+      KAFKA_ZOOKEEPER_CONNECT: "zoo1:2181,zoo2:2182,zoo3:2183"
       KAFKA_BROKER_ID: 1
       KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
-      #KAFKA_OPTS: "-javaagent:/usr/app/jmx_exporter/jmx_prometheus_javaagent.jar=7071:/usr/app/jmx_exporter/prom-jmx-agent-config.yml"
       EXTRA_ARGS: "-javaagent:/usr/app/jmx_exporter/jmx_prometheus_javaagent.jar=7071:/usr/app/jmx_exporter/prom-jmx-agent-config.yml"
       KAFKA_JMX_HOSTNAME: kafka1
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     volumes:
       - ./zk/kafka1/data:/var/lib/kafka/data
       - ./jmx_exporter:/usr/app/jmx_exporter/
     depends_on:
       - zoo1
+      - zoo2
+      - zoo3
+
+  kafka2:
+    image: confluentinc/cp-kafka:6.2.1
+    hostname: kafka2
+    container_name: kafka2
+    ports:
+      - "9093:9093"
+      - "7072:7071"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka2:19093,LISTENER_DOCKER_EXTERNAL://localhost:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
+      KAFKA_ZOOKEEPER_CONNECT: "zoo1:2181,zoo2:2182,zoo3:2183"
+      KAFKA_BROKER_ID: 2
+      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+      EXTRA_ARGS: "-javaagent:/usr/app/jmx_exporter/jmx_prometheus_javaagent.jar=7071:/usr/app/jmx_exporter/prom-jmx-agent-config.yml"
+      KAFKA_JMX_HOSTNAME: kafka2
+    volumes:
+      - ./zk/kafka2/data:/var/lib/kafka/data
+      - ./jmx_exporter:/usr/app/jmx_exporter/
+    depends_on:
+      - zoo1
+      - zoo2
+      - zoo3
+
+  kafka3:
+    image: confluentinc/cp-kafka:6.2.1
+    hostname: kafka3
+    container_name: kafka3
+    ports:
+      - "9094:9094"
+      - "7073:7071"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka3:19094,LISTENER_DOCKER_EXTERNAL://localhost:9094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
+      KAFKA_ZOOKEEPER_CONNECT: "zoo1:2181,zoo2:2182,zoo3:2183"
+      KAFKA_BROKER_ID: 3
+      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+      EXTRA_ARGS: "-javaagent:/usr/app/jmx_exporter/jmx_prometheus_javaagent.jar=7071:/usr/app/jmx_exporter/prom-jmx-agent-config.yml"
+      KAFKA_JMX_HOSTNAME: kafka3
+    volumes:
+      - ./zk/kafka3/data:/var/lib/kafka/data
+      - ./jmx_exporter:/usr/app/jmx_exporter/
+    depends_on:
+      - zoo1
+      - zoo2
+      - zoo3
 
   prometheus:
     image: prom/prometheus:v2.24.1
