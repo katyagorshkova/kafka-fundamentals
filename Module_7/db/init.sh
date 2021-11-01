@@ -9,7 +9,7 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-E
   BEGIN;
     CREATE TABLE IF NOT EXISTS orders (
 	  id int PRIMARY KEY,
-	  value VARCHAR(255)
+	  field_name VARCHAR(255)
 	);
   COMMIT;
 EOSQL

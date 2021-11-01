@@ -2,7 +2,7 @@
   "config": 
     {"connector.class": "JdbcSource", 
      "tasks.max": 1,
-     "topic.prefix": "connect-jdbc-",
+     "topic.prefix": "connect-jdbc-1-",
      "connection.url": "jdbc:postgresql://postgres:5432/orders",
      "mode": "incrementing", 
      "incrementing.column.name":"id",
