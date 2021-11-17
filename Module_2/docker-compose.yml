@@ -13,8 +13,8 @@ services:
         ZOO_PORT: 2181
         ZOO_SERVERS: server.1=zoo1:2888:3888;2181 server.2=zoo2:2888:3888;2182 server.3=zoo3:2888:3888;2183
     volumes:
-      - ./zk/zoo1/data:/data
-      - ./zk/zoo1/datalog:/datalog
+      - zoo1-data:/data
+      - zoo1-datalog:/datalog
 
   zoo2:
     image: zookeeper:3.7.0
@@ -28,8 +28,8 @@ services:
         ZOO_PORT: 2182
         ZOO_SERVERS: server.1=zoo1:2888:3888;2181 server.2=zoo2:2888:3888;2182 server.3=zoo3:2888:3888;2183
     volumes:
-      - ./zk/zoo2/data:/data
-      - ./zk/zoo2/datalog:/datalog
+      - zoo2-data:/data
+      - zoo2-datalog:/datalog
 
   zoo3:
     image: zookeeper:3.7.0
@@ -43,8 +43,8 @@ services:
         ZOO_PORT: 2183
         ZOO_SERVERS: server.1=zoo1:2888:3888;2181 server.2=zoo2:2888:3888;2182 server.3=zoo3:2888:3888;2183
     volumes:
-      - ./zk/zoo3/data:/data
-      - ./zk/zoo3/datalog:/datalog
+      - zoo3-data:/data
+      - zoo3-datalog:/datalog
 
   kafka1:
     image: confluentinc/cp-kafka:6.2.1
@@ -60,7 +60,7 @@ services:
       KAFKA_BROKER_ID: 1
       KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
     volumes:
-      - ./zk/kafka1/data:/var/lib/kafka/data
+      - kafka1-data:/var/lib/kafka/data
     depends_on:
       - zoo1
       - zoo2
@@ -80,7 +80,7 @@ services:
       KAFKA_BROKER_ID: 2
       KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
     volumes:
-      - ./zk/kafka2/data:/var/lib/kafka/data
+      - kafka2-data:/var/lib/kafka/data
     depends_on:
       - zoo1
       - zoo2
@@ -100,8 +100,19 @@ services:
       KAFKA_BROKER_ID: 3
       KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
     volumes:
-      - ./zk/kafka3/data:/var/lib/kafka/data
+      - kafka3-data:/var/lib/kafka/data
     depends_on:
       - zoo1
       - zoo2
       - zoo3
+
+volumes:
+  zoo1-data:
+  zoo1-datalog:
+  zoo2-data:
+  zoo2-datalog:
+  zoo3-data:
+  zoo3-datalog:
+  kafka1-data:
+  kafka2-data:
+  kafka3-data:
