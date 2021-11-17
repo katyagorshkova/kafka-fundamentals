@@ -36,11 +36,11 @@ public class Ex39TransactionalProducer {
 				System.out.printf("key=%s, value=%s => partition=%d, offset=%d\n", data2.key(), data2.value(),
 						meta2.partition(), meta2.offset());
 
+				producer.commitTransaction();
 			} catch (InterruptedException | ExecutionException e) {
 				System.out.printf("Exception %s\n", e.getMessage());
 			}
 
-			producer.commitTransaction();
 		} finally {
 			producer.flush();
 			producer.close();
