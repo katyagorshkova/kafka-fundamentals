@@ -26,7 +26,7 @@ docker exec -ti kafka1  /usr/bin/kafka-consumer-perf-test --topic events_rep3 --
 
 7. Create performance test for consumer with bigger fetch size
 
-docker exec -ti kafka1  /usr/bin/kafka-consumer-perf-test --topic events_rep3 --messages 100000 --bootstrap-server kafka1:19092,kafka2:19093,kafka3:19094 --group t1 --fetch-size 2048576
+docker exec -ti kafka1  /usr/bin/kafka-consumer-perf-test --topic events_rep3 --messages 100000 --bootstrap-server kafka1:19092,kafka2:19093,kafka3:19094 --group t2 --fetch-size 2048576
 
 8. Create new topic 
 

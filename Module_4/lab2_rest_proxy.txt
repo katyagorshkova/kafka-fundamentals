@@ -5,7 +5,7 @@ curl localhost:8082/v3/clusters
 
 2. Create topic
 
-curl -X POST -H "Content-Type: application/json" --data '{"topic_name": "my-topic"}' "http://localhost:8082/v3/clusters/<cluster-id>/topics"
+curl -X POST -H "Content-Type: application/json" --data '{"topic_name": "my-topic"}' "http://localhost:8082/v3/clusters/IqZoBHfeT2SWWjuR46Z1pQ/topics"
 
 
 3. Describe topic

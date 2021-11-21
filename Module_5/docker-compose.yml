@@ -13,8 +13,8 @@ services:
         ZOO_PORT: 2181
         ZOO_SERVERS: server.1=zoo1:2888:3888;2181 server.2=zoo2:2888:3888;2182 server.3=zoo3:2888:3888;2183
     volumes:
-      - ./zk/zoo1/data:/data
-      - ./zk/zoo1/datalog:/datalog
+      - zoo1-m5-data:/data
+      - zoo1-m5-datalog:/datalog
 
   zoo2:
     image: zookeeper:3.7.0
@@ -28,8 +28,8 @@ services:
         ZOO_PORT: 2182
         ZOO_SERVERS: server.1=zoo1:2888:3888;2181 server.2=zoo2:2888:3888;2182 server.3=zoo3:2888:3888;2183
     volumes:
-      - ./zk/zoo2/data:/data
-      - ./zk/zoo2/datalog:/datalog
+      - zoo2-m5-data:/data
+      - zoo2-m5-datalog:/datalog
 
   zoo3:
     image: zookeeper:3.7.0
@@ -43,8 +43,8 @@ services:
         ZOO_PORT: 2183
         ZOO_SERVERS: server.1=zoo1:2888:3888;2181 server.2=zoo2:2888:3888;2182 server.3=zoo3:2888:3888;2183
     volumes:
-      - ./zk/zoo3/data:/data
-      - ./zk/zoo3/datalog:/datalog
+      - zoo3-m5-data:/data
+      - zoo3-m5-datalog:/datalog
 
   kafka1:
     image: confluentinc/cp-kafka:6.2.1
@@ -63,7 +63,7 @@ services:
       EXTRA_ARGS: "-javaagent:/usr/app/jmx_exporter/jmx_prometheus_javaagent.jar=7071:/usr/app/jmx_exporter/prom-jmx-agent-config.yml"
       KAFKA_JMX_HOSTNAME: kafka1
     volumes:
-      - ./zk/kafka1/data:/var/lib/kafka/data
+      - kafka1-m5-data:/var/lib/kafka/data
       - ./jmx_exporter:/usr/app/jmx_exporter/
     depends_on:
       - zoo1
@@ -87,7 +87,7 @@ services:
       EXTRA_ARGS: "-javaagent:/usr/app/jmx_exporter/jmx_prometheus_javaagent.jar=7071:/usr/app/jmx_exporter/prom-jmx-agent-config.yml"
       KAFKA_JMX_HOSTNAME: kafka2
     volumes:
-      - ./zk/kafka2/data:/var/lib/kafka/data
+      - kafka2-m5-data:/var/lib/kafka/data
       - ./jmx_exporter:/usr/app/jmx_exporter/
     depends_on:
       - zoo1
@@ -111,7 +111,7 @@ services:
       EXTRA_ARGS: "-javaagent:/usr/app/jmx_exporter/jmx_prometheus_javaagent.jar=7071:/usr/app/jmx_exporter/prom-jmx-agent-config.yml"
       KAFKA_JMX_HOSTNAME: kafka3
     volumes:
-      - ./zk/kafka3/data:/var/lib/kafka/data
+      - kafka3-m5-data:/var/lib/kafka/data
       - ./jmx_exporter:/usr/app/jmx_exporter/
     depends_on:
       - zoo1
@@ -127,3 +127,14 @@ services:
       - 9090:9090/tcp
     volumes:
       - ./prometheus:/etc/prometheus
+
+volumes:
+  zoo1-m5-data:
+  zoo1-m5-datalog:
+  zoo2-m5-data:
+  zoo2-m5-datalog:
+  zoo3-m5-data:
+  zoo3-m5-datalog:
+  kafka1-m5-data:
+  kafka2-m5-data:
+  kafka3-m5-data:
