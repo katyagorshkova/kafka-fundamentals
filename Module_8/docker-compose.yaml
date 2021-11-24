@@ -106,8 +106,6 @@ services:
     image: confluentinc/ksqldb-server:0.19.0
     hostname: ksqldb-server
     container_name: ksqldb-server
-    depends_on:
-      - kafka1
     ports:
       - "8088:8088"
     environment:
@@ -119,7 +117,7 @@ services:
       KSQL_AUTO_OFFSET_RESET: "earliest"
       CONNECT_HOST: ksqldb-server
     depends_on:
-      - zoo1
+      - zoookeeper
       - kafka1
       
   ksqldb-cli:
