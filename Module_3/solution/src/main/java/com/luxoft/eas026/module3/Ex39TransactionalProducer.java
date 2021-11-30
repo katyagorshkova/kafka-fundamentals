@@ -38,6 +38,7 @@ public class Ex39TransactionalProducer {
 
 				producer.commitTransaction();
 			} catch (InterruptedException | ExecutionException e) {
+				producer.abortTransaction();
 				System.out.printf("Exception %s\n", e.getMessage());
 			}
 
