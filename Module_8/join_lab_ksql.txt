@@ -14,9 +14,9 @@ INSERT INTO LeftStreamTopic (id, left_ts, left_str) VALUES (4, '2019-03-29T11:58
 
 3. Insert values
 
-INSERT INTO RightStreamTopic (id, right_ts, right_str) VALUES (1, '2019-03-31T18:13:39Z', 'number_one_right');
-INSERT INTO RightStreamTopic (id, right_ts, right_str) VALUES (2, '2019-03-31T02:04:13Z', 'number_two_right');
-INSERT INTO RightStreamTopic (id, right_ts, right_str) VALUES (3, '2019-03-31T20:47:09Z', 'number_three_right');
+INSERT INTO RightStreamTopic2 (id, right_ts, right_str) VALUES (1, '2019-03-31T18:13:39Z', 'number_one_right');
+INSERT INTO RightStreamTopic2 (id, right_ts, right_str) VALUES (2, '2019-03-31T02:04:13Z', 'number_two_right');
+INSERT INTO RightStreamTopic2 (id, right_ts, right_str) VALUES (3, '2019-03-31T20:47:09Z', 'number_three_right');
 
 
 4. 
