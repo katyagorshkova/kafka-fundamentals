@@ -20,7 +20,7 @@ import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 
-public class Ex311Pipeline {
+public class Pipeline {
 
 	private final static String BOOTSTRAP_SERVERS = ":9092,:9093,:9094";
 

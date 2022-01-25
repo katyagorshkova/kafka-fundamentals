@@ -1,18 +1,18 @@
 package com.luxoft.eas026.module3;
 
+import java.time.Duration;
+import java.util.Collections;
+import java.util.Properties;
+
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
-import java.time.Duration;
-import java.util.Collections;
-import java.util.Properties;
-
-public class Ex35SingleConsumer {
+public class TransactionalConsumer {
     private final static String BOOTSTRAP_SERVERS = ":9092,:9093,:9094";
-    private static final String GROUP_ID = "ex35";
+    private static final String GROUP_ID = "ex34";
     private final static String OFFSET_RESET = "earliest";
 
     public static void main(String[] args) {
@@ -24,6 +24,8 @@ public class Ex35SingleConsumer {
                 StringDeserializer.class.getName());
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
                 StringDeserializer.class.getName());
+	    props.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read_committed");
+
         final KafkaConsumer<String,String> consumer = new KafkaConsumer<>(props);
 
         try {

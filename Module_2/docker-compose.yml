@@ -47,7 +47,7 @@ services:
       - zoo3-datalog:/datalog
 
   kafka1:
-    image: confluentinc/cp-kafka:6.2.1
+    image: confluentinc/cp-kafka:7.0.1
     hostname: kafka1
     container_name: kafka1
     ports:
@@ -67,7 +67,7 @@ services:
       - zoo3
 
   kafka2:
-    image: confluentinc/cp-kafka:6.2.1
+    image: confluentinc/cp-kafka:7.0.1
     hostname: kafka2
     container_name: kafka2
     ports:
@@ -87,7 +87,7 @@ services:
       - zoo3
 
   kafka3:
-    image: confluentinc/cp-kafka:6.2.1
+    image: confluentinc/cp-kafka:7.0.1
     hostname: kafka3
     container_name: kafka3
     ports:

@@ -6,7 +6,7 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
-public class Ex39TransactionalProducer {
+public class TransactionalProducer {
 	private final static String BOOTSTRAP_SERVERS = ":9092,:9093,:9094";
 	private final static String TOPIC1 = "topic1";
 	private final static String TOPIC2 = "topic2";

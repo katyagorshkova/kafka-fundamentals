@@ -1,15 +1,15 @@
  1. In KSQL
  
-CREATE STREAM LeftStreamTopic (id INT KEY, left_str VARCHAR, left_ts VARCHAR) WITH (KAFKA_TOPIC='LeftStreamTopic', VALUE_FORMAT='JSON', TIMESTAMP='left_ts', TIMESTAMP_FORMAT='yyyy-MM-dd''T''HH:mm:ssX', PARTITIONS=4);
+CREATE STREAM LeftStreamTopic2 (id INT KEY, left_str VARCHAR, left_ts VARCHAR) WITH (KAFKA_TOPIC='LeftStreamTopic2', VALUE_FORMAT='JSON', TIMESTAMP='left_ts', TIMESTAMP_FORMAT='yyyy-MM-dd''T''HH:mm:ssX', PARTITIONS=4);
  
-CREATE STREAM RightStreamTopic (ID INT KEY, right_str VARCHAR, right_ts VARCHAR) WITH (KAFKA_TOPIC='RightStreamTopic', VALUE_FORMAT='JSON', TIMESTAMP='right_ts', TIMESTAMP_FORMAT='yyyy-MM-dd''T''HH:mm:ssX', PARTITIONS=4);
+CREATE STREAM RightStreamTopic2 (ID INT KEY, right_str VARCHAR, right_ts VARCHAR) WITH (KAFKA_TOPIC='RightStreamTopic2', VALUE_FORMAT='JSON', TIMESTAMP='right_ts', TIMESTAMP_FORMAT='yyyy-MM-dd''T''HH:mm:ssX', PARTITIONS=4);
  
  2. Insert values
  
-INSERT INTO LeftStreamTopic (id, left_ts, left_str) VALUES (1, '2019-03-29T06:01:18Z', 'number_one_left');
-INSERT INTO LeftStreamTopic (id, left_ts, left_str) VALUES (2, '2019-03-29T17:02:20Z', 'number_two_left');
-INSERT INTO LeftStreamTopic (id, left_ts, left_str) VALUES (3, '2019-03-29T13:44:10Z', 'number_three_left');
-INSERT INTO LeftStreamTopic (id, left_ts, left_str) VALUES (4, '2019-03-29T11:58:25Z', 'number_four_left');
+INSERT INTO LeftStreamTopic2 (id, left_ts, left_str) VALUES (1, '2019-03-29T06:01:18Z', 'number_one_left');
+INSERT INTO LeftStreamTopic2 (id, left_ts, left_str) VALUES (2, '2019-03-29T17:02:20Z', 'number_two_left');
+INSERT INTO LeftStreamTopic2 (id, left_ts, left_str) VALUES (3, '2019-03-29T13:44:10Z', 'number_three_left');
+INSERT INTO LeftStreamTopic2 (id, left_ts, left_str) VALUES (4, '2019-03-29T11:58:25Z', 'number_four_left');
  
 
 3. Insert values
@@ -21,4 +21,4 @@ INSERT INTO RightStreamTopic2 (id, right_ts, right_str) VALUES (3, '2019-03-31T2
 
 4. 
 
-SELECT l.id AS left_id, l.left_str, r. right_str FROM LeftStreamTopic l INNER JOIN RightStreamTopic r WITHIN 7 DAYS ON l.id = r.id EMIT CHANGES;
+SELECT l.id AS left_id, l.left_str, r. right_str FROM LeftStreamTopic2 l INNER JOIN RightStreamTopic2 r WITHIN 7 DAYS ON l.id = r.id EMIT CHANGES;

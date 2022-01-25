@@ -1,52 +1,21 @@
 
 1. Create topic
 
-docker exec -ti kafka1 /usr/bin/kafka-topics --create  --zookeeper zoo1:2181,zoo2:2182,zoo3:2183 --replication-factor 2 --partitions 4 --topic events1
+docker exec -ti kafka1 /usr/bin/kafka-topics --create  --bootstrap-server kafka1:19092,kafka2:19093,kafka3:19094 --replication-factor 2 --partitions 4 --topic events
 
-2. Read the data 
 
-docker exec -ti kafka1 /usr/bin/kafka-console-consumer --bootstrap-server kafka1:19092,kafka2:19093,kafka3:19094 --topic events1 --from-beginning --property print.key=true --property key.separator="-"
+2. Create topic 
 
+docker exec -ti kafka1 /usr/bin/kafka-topics --create  --bootstrap-server kafka1:19092,kafka2:19093,kafka3:19094 --replication-factor 2 --partitions 4 --topic topic1
 
 3. Create topic 
 
-docker exec -ti kafka1 /usr/bin/kafka-topics --create  --zookeeper zoo1:2181,zoo2:2182,zoo3:2183 --replication-factor 2 --partitions 4 --topic events3
+docker exec -ti kafka1 /usr/bin/kafka-topics --create  --bootstrap-server kafka1:19092,kafka2:19093,kafka3:19094 --replication-factor 2 --partitions 4 --topic topic2
 
 4. Create topic 
 
-docker exec -ti kafka1 /usr/bin/kafka-topics --create  --zookeeper zoo1:2181,zoo2:2182,zoo3:2183 --replication-factor 2 --partitions 4 --topic events4_1
-
+docker exec -ti kafka1 /usr/bin/kafka-topics --create  --bootstrap-server kafka1:19092,kafka2:19093,kafka3:19094 --replication-factor 2 --partitions 4 --topic lowerCaseLetters
 
 5. Create topic 
 
-docker exec -ti kafka1 /usr/bin/kafka-topics --create  --zookeeper zoo1:2181,zoo2:2182,zoo3:2183 --replication-factor 2 --partitions 4 --topic events5
-
-6. Create topic 
-
-docker exec -ti kafka1 /usr/bin/kafka-topics --create  --zookeeper zoo1:2181,zoo2:2182,zoo3:2183 --replication-factor 2 --partitions 4 --topic topic1
-
-
-7. Create topic 
-
-docker exec -ti kafka1 /usr/bin/kafka-topics --create  --zookeeper zoo1:2181,zoo2:2182,zoo3:2183 --replication-factor 2 --partitions 4 --topic topic2
-
-
-8. Create topic
-
-docker exec -ti kafka1 /usr/bin/kafka-topics --create  --zookeeper zoo1:2181,zoo2:2182,zoo3:2183 --replication-factor 2 --partitions 4 --topic lowerCaseLetters
-
-9. Create topic 
-
-docker exec -ti kafka1 /usr/bin/kafka-topics --create  --zookeeper zoo1:2181,zoo2:2182,zoo3:2183 --replication-factor 2 --partitions 4 --topic upperCaseLetters
-
-
-10. Send the data 
-
-docker exec -ti kafka1 /usr/bin/kafka-console-producer --bootstrap-server kafka1:19092,kafka2:19093,kafka3:19094 --topic lowerCaseLetters  --property parse.key=true --property key.separator=,
-
-11. Read the data
-
-docker exec -ti kafka1 /usr/bin/kafka-console-consumer --bootstrap-server kafka1:19092,kafka2:19093,kafka3:19094 --topic upperCaseLetters --property print.key=true --property key.separator=","
-
-
-
+docker exec -ti kafka1 /usr/bin/kafka-topics --create  --bootstrap-server kafka1:19092,kafka2:19093,kafka3:19094 --replication-factor 2 --partitions 4 --topic upperCaseLetters

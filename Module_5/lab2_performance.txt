@@ -34,5 +34,5 @@ docker exec -ti kafka1 /usr/bin/kafka-topics --create  --zookeeper zoo1:2181,zoo
 
 9. Check end to end latency
 
-docker exec -ti kafka1  /usr/bin/kafka-run-class kafka.tools.EndToEndLatency kafka1:19092,kafka2:19093,kafka3:19094 events_end2end 100000 1 1024
+docker exec -ti kafka1  /usr/bin/kafka-run-class kafka.tools.EndToEndLatency kafka1:19092,kafka2:19093,kafka3:19094 events_end2end 10000 1 1024
 

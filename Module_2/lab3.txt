@@ -1,6 +1,6 @@
 1. Purge the topic. Set retention to a small value
 
-docker exec -ti kafka1 /usr/bin/kafka-topics --alter  --zookeeper zoo1:2181,zoo2:2182,zoo3:2183  --topic events2 --config retention.ms=10
+docker exec -ti kafka1 /usr/bin/kafka-configs --alter  --bootstrap-server kafka1:19092,kafka2:19093,kafka3:19094  --entity-name events2  --entity-type topics --add-config retention.ms=10
 
 3. Check the topic
 
