@@ -26,8 +26,8 @@ public class TransactionalProducer {
 		producer.initTransactions();
 		try {
 			producer.beginTransaction();
-			final ProducerRecord<String, String> data1 = new ProducerRecord<>(TOPIC1, "m11");
-			final ProducerRecord<String, String> data2 = new ProducerRecord<>(TOPIC2, "m22");
+			final ProducerRecord<String, String> data1 = new ProducerRecord<>(TOPIC1, "m3");
+			final ProducerRecord<String, String> data2 = new ProducerRecord<>(TOPIC2, "m4");
 			try {
 				RecordMetadata meta = producer.send(data1).get();
 				System.out.printf("key=%s, value=%s => partition=%d, offset=%d\n", data1.key(), data1.value(),

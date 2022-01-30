@@ -21,7 +21,11 @@ curl http://localhost:8083/connector-plugins
  
 5. Add JDBC source connector
 
-Add configuration through Control Center. Connect -> Cluster -> JDBC Source Connector-> Upload connector config file. The configuration is in postgres-source-connector-1.json
+Add configuration through Control Center. 
+
+http://localhost:9021
+
+Connect -> Cluster -> JDBC Source Connector-> Upload connector config file. The configuration is in postgres-source-connector-1.json
 
 or through REST
 
@@ -34,7 +38,7 @@ curl http://localhost:8083/connectors/jdbc-source-connector/status
 
 7. Check messages
 
-http://localhost:8000/
+http://localhost:8180/
 
 8. Add more data 
 

@@ -1,11 +1,11 @@
 1. Create topic with replication factor 3
 
-docker exec -ti kafka1 /usr/bin/kafka-topics --create  --zookeeper zoo1:2181,zoo2:2182,zoo3:2183 --replication-factor 3 --partitions 4 --topic events_rep3
+docker exec -ti kafka1 /usr/bin/kafka-topics --create  --bootstrap-server kafka1:19092,kafka2:19093,kafka3:19094 --replication-factor 3 --partitions 4 --topic events_rep3
 
 
 2. Create topic with replication factor 1
 
-docker exec -ti kafka1 /usr/bin/kafka-topics --create  --zookeeper zoo1:2181,zoo2:2182,zoo3:2183 --replication-factor 1 --partitions 4 --topic events_rep1
+docker exec -ti kafka1 /usr/bin/kafka-topics --create  --bootstrap-server kafka1:19092,kafka2:19093,kafka3:19094 --replication-factor 1 --partitions 4 --topic events_rep1
 
 
 3. Create test of the producer performance for 
@@ -30,7 +30,7 @@ docker exec -ti kafka1  /usr/bin/kafka-consumer-perf-test --topic events_rep3 --
 
 8. Create new topic 
 
-docker exec -ti kafka1 /usr/bin/kafka-topics --create  --zookeeper zoo1:2181,zoo2:2182,zoo3:2183 --replication-factor 3 --partitions 4 --topic events_end2end
+docker exec -ti kafka1 /usr/bin/kafka-topics --create  --bootstrap-server kafka1:19092,kafka2:19093,kafka3:19094 --replication-factor 3 --partitions 4 --topic events_end2end
 
 9. Check end to end latency
 

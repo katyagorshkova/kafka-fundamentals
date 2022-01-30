@@ -5,21 +5,21 @@ curl localhost:8082/v3/clusters
 
 2. Create topic
 
-curl -X POST -H "Content-Type: application/json" --data '{"topic_name": "my-topic"}' "http://localhost:8082/v3/clusters/IqZoBHfeT2SWWjuR46Z1pQ/topics"
+curl -X POST -H "Content-Type: application/json" --data '{"topic_name": "my-topic"}' "http://localhost:8082/v3/clusters/<cluster-id>/topics"
 
 
 3. Describe topic
 
-curl -X GET http://localhost:8082/topics/my-topic
+curl -X GET http://localhost:8082/v3/clusters/<cluster-id>/topics/my-topic
 
 
 4. List all topics 
 
-curl -X GET http://localhost:8082/topics
+curl -X GET http://localhost:8082/v3/clusters/<cluster-id>/topics
 
 5. Send data 
 
-curl -X POST -H "Content-Type: application/vnd.kafka.json.v2+json" --data '{"records": [{"key": "key1","value": "value1"}]}' "http://localhost:8082/topics/my-topic"
+curl -X POST -H "Content-Type: application/json" --data '{ "key": { "type": "JSON", "data": "key2" }, "value": { "type": "JSON", "data": "value2" } }' "http://localhost:8082/v3/clusters/<cluster-id>/topics/my-topic/records"
 
 6. Create a consumer group
 

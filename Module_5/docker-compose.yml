@@ -47,7 +47,7 @@ services:
       - zoo3-m5-datalog:/datalog
 
   kafka1:
-    image: confluentinc/cp-kafka:6.2.1
+    image: confluentinc/cp-kafka:7.0.1
     hostname: kafka1
     container_name: kafka1
     ports:
@@ -71,7 +71,7 @@ services:
       - zoo3
 
   kafka2:
-    image: confluentinc/cp-kafka:6.2.1
+    image: confluentinc/cp-kafka:7.0.1
     hostname: kafka2
     container_name: kafka2
     ports:
@@ -95,7 +95,7 @@ services:
       - zoo3
 
   kafka3:
-    image: confluentinc/cp-kafka:6.2.1
+    image: confluentinc/cp-kafka:7.0.1
     hostname: kafka3
     container_name: kafka3
     ports:
@@ -119,7 +119,7 @@ services:
       - zoo3
 
   prometheus:
-    image: prom/prometheus:v2.24.1
+    image: prom/prometheus:v2.32.1
     hostname: prom
     container_name: prom
     restart: always
@@ -127,6 +127,26 @@ services:
       - 9090:9090/tcp
     volumes:
       - ./prometheus:/etc/prometheus
+
+  akhq:
+    # build:
+    #   context: .
+    image: tchiotludo/akhq:0.20.0
+    container_name: akhq
+    environment:
+      AKHQ_CONFIGURATION: |
+        akhq:
+          connections:
+            docker-kafka-server:
+              properties:
+                bootstrap.servers: "kafka1:19092,kafka2:19093,kafka3:19094"
+              schema-registry:
+                url: "http://schema-registry:8081"
+    ports:
+      - 8180:8080
+    links:
+      - kafka
+      - schema-registry
 
 volumes:
   zoo1-m5-data:

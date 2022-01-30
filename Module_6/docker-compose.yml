@@ -17,7 +17,7 @@ services:
       - ./zk/zoo1-m/datalog:/datalog
 
   kafka1-m:
-    image: confluentinc/cp-kafka:6.2.0
+    image: confluentinc/cp-kafka:7.0.1
     hostname: kafka1-m
     container_name: kafka1-m
     ports:
@@ -55,7 +55,7 @@ services:
       - ./zk/zoo1/datalog:/datalog
 
   kafka1:
-    image: confluentinc/cp-kafka:6.2.0
+    image: confluentinc/cp-kafka:7.0.1
     hostname: kafka1
     container_name: kafka1
     ports:

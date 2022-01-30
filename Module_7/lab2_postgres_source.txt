@@ -1,5 +1,7 @@
 1. Add JDBC source connector
 
+http://localhost:9021
+
 Add configuration through Control Center. Connect -> Cluster -> JDBC Source Connector-> Upload connector config file. The configuration is in postgres-source-connector-2.json
 
 or through REST
@@ -9,12 +11,12 @@ curl -X POST -H 'Content-Type: application/json' -d @postgres-source-connector-2
 
 2. Stop connector 
 
-PUT localhost:8083/connectors/jdbc-source-connector/pause
+curl -X PUT localhost:8083/connectors/jdbc-source-connector/pause
 
 
 3. Check status
 
-GET localhost:8083/connectors/jdbc-source-connector/status
+curl -X GET localhost:8083/connectors/jdbc-source-connector/status
 
 4. Add new data 
 
@@ -25,11 +27,11 @@ GET localhost:8083/connectors/jdbc-source-connector/status
 
 6. Resume connector 
 
-PUT localhost:8083/connectors/jdbc-source-connector/resume
+curl -X PUT localhost:8083/connectors/jdbc-source-connector/resume
 
 7. Check status 
 
-GET localhost:8083/connectors/jdbc-source-connector/status
+curl -X GET localhost:8083/connectors/jdbc-source-connector/status
 
 8. Check messages
 
