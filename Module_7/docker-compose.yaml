@@ -91,10 +91,9 @@ services:
     hostname: control-center
     container_name: control-center
     depends_on:
-      - broker
+      - kafka
       - schema-registry
       - connect
-      - ksqldb-server
     ports:
       - "9021:9021"
     environment:
