@@ -18,10 +18,10 @@ curl -X PUT localhost:8083/connectors/jdbc-source-connector/pause
 
 curl -X GET localhost:8083/connectors/jdbc-source-connector/status
 
-4. Add new data 
+4. Add new data (http://localhost:8080 login as demo|demo, use SQL Command)
 
-  insert into orders values(7,'g');
-  insert into orders values(8,'h');
+  insert into products values(7, 'saucepan', 11.0);
+  insert into products values(8, 'iron', 7.0);
 
 5. Check messages
 

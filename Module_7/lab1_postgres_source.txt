@@ -1,3 +1,5 @@
+Synchronise data from Postgres to Kafka
+
 1. Login into  admin application http://localhost:8080
 2. Login as
 
@@ -5,7 +7,7 @@ System: Postgresql
 Server: postgres
 Username: demo
 Password: demo
-Database: products
+Database: shop
 
 2. Create a database (SQL command)
 

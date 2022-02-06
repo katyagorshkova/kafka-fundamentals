@@ -3,7 +3,7 @@
     {"connector.class": "JdbcSource", 
      "tasks.max": 1,
      "topic.prefix": "connect-jdbc-2-",
-     "connection.url": "jdbc:postgresql://postgres:5432/products",
+     "connection.url": "jdbc:postgresql://postgres:5432/shop",
      "mode": "incrementing", 
      "incrementing.column.name":"id",
      "value.converter": "org.apache.kafka.connect.json.JsonConverter",
