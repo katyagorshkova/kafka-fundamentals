@@ -93,7 +93,6 @@ services:
       - kafka
       - schema-registry
       - connect
-      - ksqldb-server
     ports:
       - "9021:9021"
     environment:

@@ -51,9 +51,8 @@ services:
     hostname: control-center
     container_name: control-center
     depends_on:
-      - broker
+      - kafka
       - schema-registry
-      - connect
       - ksqldb-server
     ports:
       - "9021:9021"
@@ -105,7 +104,7 @@ services:
       CONNECT_HOST: ksqldb-server
     depends_on:
       - zoookeeper
-      - kafka1
+      - kafka
       
   ksqldb-cli:
     container_name: ksqldb-cli
