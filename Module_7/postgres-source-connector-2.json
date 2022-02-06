@@ -3,12 +3,12 @@
     {"connector.class": "JdbcSource", 
      "tasks.max": 1,
      "topic.prefix": "connect-jdbc-2-",
-     "connection.url": "jdbc:postgresql://postgres:5432/orders",
+     "connection.url": "jdbc:postgresql://postgres:5432/products",
      "mode": "incrementing", 
      "incrementing.column.name":"id",
      "value.converter": "org.apache.kafka.connect.json.JsonConverter",
      "value.converter.schemas.enable":"true", 
-     "table.whitelist" : "public.orders",
+     "table.whitelist" : "public.products",
      "connection.user": "demo", 
      "connection.password" : "demo",
      "transforms" : "createKey,extractInt,RenameField",
@@ -17,6 +17,6 @@
      "transforms.extractInt.type":"org.apache.kafka.connect.transforms.ExtractField$Key",
      "transforms.extractInt.field":"id",
      "transforms.RenameField.type" : "org.apache.kafka.connect.transforms.ReplaceField$Value",
-     "transforms.RenameField.renames" : "field_name:new_field_name"
+     "transforms.RenameField.renames" : "name:code"
     }
 }

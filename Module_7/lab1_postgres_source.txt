@@ -5,14 +5,22 @@ System: Postgresql
 Server: postgres
 Username: demo
 Password: demo
-Database: orders
+Database: products
+
+2. Create a database (SQL command)
+
+CREATE TABLE IF NOT EXISTS products (
+    id INT PRIMARY KEY,
+    name VARCHAR(255),
+    price NUMERIC(5,2)
+);
 
 3. Enter SQL Command
 
-  insert into orders values(1,'a');
-  insert into orders values(2,'b');
-  insert into orders values(3,'c');
-  insert into orders values(4,'d');
+  insert into products values(1, 'сup', 1.0);
+  insert into products values(2, 'kettle', 5.0);
+  insert into products values(3, 'phone', 500.20);
+  insert into products values(4, 'tablet', 125.5);
 
 4. Check connector-plugins through control center or through
 
@@ -42,9 +50,10 @@ http://localhost:8180/
 
 8. Add more data 
 
-  insert into orders values(5,'e');
-  insert into orders values(6,'f');
+  insert into products values(5, 'toaster', 15.0);
+  insert into products values(6, 'coffee maker', 25.0);
 
 9. Check messages
 
+http://localhost:8180/
 

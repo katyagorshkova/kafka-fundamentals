@@ -50,7 +50,7 @@ services:
     hostname: connect
     container_name: connect
     depends_on:
-      - broker
+      - kafka
       - schema-registry
     ports:
       - "8083:8083"
@@ -79,7 +79,6 @@ services:
       - bash 
       - -c 
       - |
-        confluent-hub install --no-prompt jcustenborder/kafka-connect-spooldir:latest
         confluent-hub install --no-prompt confluentinc/kafka-connect-jdbc:10.2.4
         cd /usr/share/confluent-hub-components/confluentinc-kafka-connect-jdbc
         curl https://jdbc.postgresql.org/download/postgresql-42.2.19.jar
@@ -91,7 +90,7 @@ services:
     hostname: control-center
     container_name: control-center
     depends_on:
-      - broker
+      - kafka
       - schema-registry
       - connect
       - ksqldb-server
@@ -140,9 +139,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
-      APP_DB_USER: demo
-      APP_DB_PASS: demo
-      APP_DB_NAME: orders
     volumes:
       - ./db:/docker-entrypoint-initdb.d/
 
