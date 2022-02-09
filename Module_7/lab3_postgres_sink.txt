@@ -4,10 +4,11 @@ http://localhost:9021
 
 2. In schema registry container produce avro messages
 
-docker exec -ti schema-registry /usr/bin/kafka-avro-console-producer --bootstrap-server kafka:19092 --topic purchases  --property schema.registry.url=http://schema-registry:8081 --property value.schema='{"type":"record","name":"purchase","fields":[{"name":"id","type":"int"},{"name":"product","type":"string"},{"name":"quantity","type":"int"},{"name":"price","type":"float"}]}'
+docker exec -ti schema-registry /usr/bin/kafka-avro-console-producer --bootstrap-server kafka:19092 --topic customers  --property schema.registry.url=http://schema-registry:8081 --property value.schema='{"type":"record","name":"customer","fields":[{"name":"id","type":"int"},{"name":"name","type":"string"}]}'
 
-{"id": 1, "product": "prod1", "quantity": 100, "price": 50}
-{"id": 2, "product": "prod2", "quantity": 30, "price": 150}
-{"id": 3, "product": "prod3", "quantity": 20, "price": 10}
+
+{"id": 1, "name": "Jane Doe"}
+{"id": 2, "name": "John Smith"}
+{"id": 3, "name": "Ann Black"}
 
 3. Check the table in http://localhost:8080
