@@ -33,12 +33,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @DirtiesContext
 @SpringBootTest()
-@EmbeddedKafka(partitions = 5, topics = { KafkaProducerServiceTest.TOPIC })
+@EmbeddedKafka(partitions = 5, topics = { "topic1" })
 public class KafkaProducerServiceTest {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(KafkaProducerServiceTest.class);
-
-	public final static String TOPIC = "topic1";
+	private static final Logger log = LoggerFactory.getLogger(KafkaProducerServiceTest.class);
 
 	@Autowired
 	private KafkaMessageProducerService kafkaMessageProducerService;
@@ -54,7 +52,7 @@ public class KafkaProducerServiceTest {
 	public void setUp() {
 		consumerRecords = new LinkedBlockingQueue<>();
 
-		ContainerProperties containerProperties = new ContainerProperties(TOPIC);
+		ContainerProperties containerProperties = new ContainerProperties("topic1");
 
 		Map<String, Object> consumerProperties = KafkaTestUtils.consumerProps("group1", "false",
 				embeddedKafka);
@@ -63,7 +61,7 @@ public class KafkaProducerServiceTest {
 
 		listener = new KafkaMessageListenerContainer<>(consumer, containerProperties);
 		listener.setupMessageListener((MessageListener<String, String>) record -> {
-			LOGGER.debug("Listened message='{}'", record.toString());
+			log.debug("Listened message='{}'", record.toString());
 			consumerRecords.add(record);
 		});
 		listener.start();
@@ -77,7 +75,7 @@ public class KafkaProducerServiceTest {
 	}
 
 	@Test
-	public void it_should_send_message() throws InterruptedException, IOException {
+	public void shouldSendMessage() throws InterruptedException, IOException {
 
 		kafkaMessageProducerService.send("msg1");
 

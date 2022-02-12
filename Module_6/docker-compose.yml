@@ -12,9 +12,6 @@ services:
         ZOO_MY_ID: 1
         ZOO_PORT: 2182
         ZOO_SERVERS: server.1=zoo1-m:2888:3888;2182
-    volumes:
-      - ./zk/zoo1-m/data:/data
-      - ./zk/zoo1-m/datalog:/datalog
 
   kafka1-m:
     image: confluentinc/cp-kafka:7.0.1
@@ -34,8 +31,7 @@ services:
       KAFKA_JMX_PORT: 9101
       KAFKA_JMX_HOSTNAME: kafka1-m
     volumes:
-      - ./zk/kafka1-m/data:/var/lib/kafka/data
-      - ./config:/tmp/config
+       - ./config:/tmp/config
     depends_on:
       - zoo1-m
 
@@ -50,9 +46,6 @@ services:
         ZOO_MY_ID: 1
         ZOO_PORT: 2181
         ZOO_SERVERS: server.1=zoo1:2888:3888;2181
-    volumes:
-      - ./zk/zoo1/data:/data
-      - ./zk/zoo1/datalog:/datalog
 
   kafka1:
     image: confluentinc/cp-kafka:7.0.1
@@ -71,7 +64,21 @@ services:
       KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
       KAFKA_JMX_PORT: 9101
       KAFKA_JMX_HOSTNAME: kafka1
-    volumes:
-      - ./zk/kafka1/data:/var/lib/kafka/data
     depends_on:
       - zoo1
+
+  akhq:
+    image: tchiotludo/akhq:0.20.0
+    container_name: akhq
+    environment:
+      AKHQ_CONFIGURATION: |
+        akhq:
+          connections:
+            docker-kafka-server:
+              properties:
+                bootstrap.servers: "kafka1:19092"
+            docker-kafka-server-m:
+              properties:
+                bootstrap.servers: "kafka1-m:19292"
+    ports:
+      - 8180:8080
