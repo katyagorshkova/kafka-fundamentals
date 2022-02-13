@@ -18,8 +18,6 @@ public class ExampleProducer {
 
 	private final static String BOOTSTRAP_SERVERS = ":9092,:9093,:9094";
 
-	private final static String TOPIC = "events";
-
 	private final static String CLIENT_ID = "ex";
 
 	public static void main(String[] args){
@@ -37,7 +35,7 @@ public class ExampleProducer {
 			@Override
 			public void run() {
 				final int number = new Random().nextInt(10);
-				ProducerRecord<String, Integer> data = new ProducerRecord<>(TOPIC, "key" + number, number);
+				ProducerRecord<String, Integer> data = new ProducerRecord<>(args[0], "key" + number, number);
 				RecordMetadata meta;
 				try {
 					meta = producer.send(data).get();
