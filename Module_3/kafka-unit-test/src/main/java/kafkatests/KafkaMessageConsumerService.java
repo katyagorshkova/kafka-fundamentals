@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class KafkaMessageConsumerService {
 
-	private static final Logger log = LoggerFactory.getLogger(KafkaMessageConsumerService.class);
+	private static final Logger LOG = LoggerFactory.getLogger(KafkaMessageConsumerService.class);
 
 	@SuppressWarnings({ "static-method", "unused" })
 	@KafkaListener(topics = "topic2")
@@ -19,6 +19,6 @@ public class KafkaMessageConsumerService {
 		@Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
 		@Header(KafkaHeaders.RECEIVED_PARTITION_ID) Integer partition,
 		@Header(KafkaHeaders.OFFSET) Long offset) {
-		log.info("Message consumed {}", msg);
+		LOG.info("Message consumed {}", msg);
 	}
 }
