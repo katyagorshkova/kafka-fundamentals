@@ -1,10 +1,8 @@
 package kafkatests;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.kafka.test.assertj.KafkaConditions.key;
-import static org.springframework.kafka.test.assertj.KafkaConditions.value;
+import static org.assertj.core.api.Assertions.*;
+import static org.springframework.kafka.test.assertj.KafkaConditions.*;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -14,7 +12,6 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,25 +25,23 @@ import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.kafka.test.utils.ContainerTestUtils;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
 @DirtiesContext
-@SpringBootTest()
+@SpringBootTest
 @EmbeddedKafka(partitions = 5, topics = { "topic1" })
-public class KafkaProducerServiceTest {
+class KafkaProducerServiceTest {
 
 	private static final Logger log = LoggerFactory.getLogger(KafkaProducerServiceTest.class);
 
 	@Autowired
 	private KafkaMessageProducerService kafkaMessageProducerService;
 
+	@Autowired
+	private EmbeddedKafkaBroker embeddedKafka;
+
 	private KafkaMessageListenerContainer<String, String> listener;
 
 	private BlockingQueue<ConsumerRecord<String, String>> consumerRecords;
-
-	@Autowired
-	private EmbeddedKafkaBroker embeddedKafka;
 
 	@BeforeEach
 	public void setUp() {
@@ -54,14 +49,13 @@ public class KafkaProducerServiceTest {
 
 		ContainerProperties containerProperties = new ContainerProperties("topic1");
 
-		Map<String, Object> consumerProperties = KafkaTestUtils.consumerProps("group1", "false",
-				embeddedKafka);
+		Map<String, Object> consumerProperties = KafkaTestUtils.consumerProps("group1", "false", embeddedKafka);
 
 		DefaultKafkaConsumerFactory<String, String> consumer = new DefaultKafkaConsumerFactory<>(consumerProperties);
 
 		listener = new KafkaMessageListenerContainer<>(consumer, containerProperties);
 		listener.setupMessageListener((MessageListener<String, String>) record -> {
-			log.debug("Listened message='{}'", record.toString());
+			log.debug("Listened message='{}'", record);
 			consumerRecords.add(record);
 		});
 		listener.start();
@@ -75,15 +69,15 @@ public class KafkaProducerServiceTest {
 	}
 
 	@Test
-	public void shouldSendMessage() throws InterruptedException, IOException {
+	void shouldSendMessage() throws InterruptedException {
 
 		kafkaMessageProducerService.send("msg1");
 
 		ConsumerRecord<String, String> received = consumerRecords.poll(10, TimeUnit.SECONDS);
 
-		assertThat(received).has(value("msg1"));
-
-		assertThat(received).has(key(null));
+		assertThat(received)
+			.has(value("msg1"))
+			.has(key(null));
 	}
 
 }

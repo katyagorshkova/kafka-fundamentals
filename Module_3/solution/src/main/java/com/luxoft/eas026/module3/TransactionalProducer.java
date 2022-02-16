@@ -1,18 +1,29 @@
 package com.luxoft.eas026.module3;
 
-import org.apache.kafka.clients.producer.*;
-import org.apache.kafka.common.serialization.StringSerializer;
-
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
-public class TransactionalProducer {
-	private final static String BOOTSTRAP_SERVERS = ":9092,:9093,:9094";
-	private final static String TOPIC1 = "topic1";
-	private final static String TOPIC2 = "topic2";
-	private final static String CLIENT_ID = "ex37";
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.RecordMetadata;
+import org.apache.kafka.common.serialization.StringSerializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+public class TransactionalProducer {
+
+	private static final Logger LOG = LoggerFactory.getLogger(TransactionalProducer.class);
+
+	private static final String BOOTSTRAP_SERVERS = ":9092,:9093,:9094";
+	private static final String TOPIC1 = "topic1";
+	private static final String TOPIC2 = "topic2";
+	private static final String CLIENT_ID = "ex37";
+
+	@SuppressWarnings("boxing")
 	public static void main(String[] args) {
+
 		Properties props = new Properties();
 		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
 		props.put(ProducerConfig.CLIENT_ID_CONFIG, CLIENT_ID);
@@ -22,29 +33,24 @@ public class TransactionalProducer {
 		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 		props.put(ProducerConfig.TRANSACTIONAL_ID_CONFIG, "my.id");
 
-		final Producer<String, String> producer = new KafkaProducer<>(props);
-		producer.initTransactions();
-		try {
+		try (Producer<String, String> producer = new KafkaProducer<>(props)) {
+			producer.initTransactions();
 			producer.beginTransaction();
 			final ProducerRecord<String, String> data1 = new ProducerRecord<>(TOPIC1, "m3");
 			final ProducerRecord<String, String> data2 = new ProducerRecord<>(TOPIC2, "m4");
 			try {
-				RecordMetadata meta = producer.send(data1).get();
-				System.out.printf("key=%s, value=%s => partition=%d, offset=%d\n", data1.key(), data1.value(),
-						meta.partition(), meta.offset());
+				RecordMetadata meta1 = producer.send(data1).get();
+				LOG.info("key = {}, value = {} => partition = {}, offset= {}", data1.key(), data1.value(), meta1.partition(), meta1.offset());
 				RecordMetadata meta2 = producer.send(data2).get();
-				System.out.printf("key=%s, value=%s => partition=%d, offset=%d\n", data2.key(), data2.value(),
-						meta2.partition(), meta2.offset());
+				LOG.info("key = {}, value = {} => partition = {}, offset= {}", data2.key(), data2.value(), meta2.partition(), meta2.offset());
 
 				producer.commitTransaction();
 			} catch (InterruptedException | ExecutionException e) {
 				producer.abortTransaction();
-				System.out.printf("Exception %s\n", e.getMessage());
+				LOG.error("Something goes wrong: {}", e.getMessage(), e);
+			} finally {
+				producer.flush();
 			}
-
-		} finally {
-			producer.flush();
-			producer.close();
 		}
 	}
 }

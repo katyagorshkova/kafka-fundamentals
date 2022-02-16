@@ -13,21 +13,27 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
+@SuppressWarnings("static-method")
 public class KafkaApplication {
 
-	private static final Logger log = LoggerFactory.getLogger(KafkaApplication.class);
+	private static final Logger LOG = LoggerFactory.getLogger(KafkaApplication.class);
 
-    public static void main(String[] args) {
-        SpringApplication.run(KafkaApplication.class, args);
-    }
-    
-    @Bean
-    public Supplier<String> send() {
-        return () ->  String.valueOf(new Random().nextInt());
-    }
+	@SuppressWarnings("resource")
+	public static void main(String[] args) {
+		SpringApplication.run(KafkaApplication.class, args);
+	}
 
-    @Bean
-    public Consumer<String> receive() {
-        return message -> log.info("Message " + message);
-    }
+	@Bean
+	public Supplier<String> send() {
+		return () -> String.valueOf(new Random().nextInt());
+	}
+
+	@Bean
+	public Consumer<String> receive() {
+		return KafkaApplication::log;
+	}
+
+	private static void log(String message) {
+		LOG.info("Message {}", message);
+	}
 }
