@@ -3,7 +3,6 @@ package com.luxoft.eas026.module3;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
@@ -15,13 +14,18 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.IntegerDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SlowConsumer {
 
-	private final static String BOOTSTRAP_SERVERS = ":9092,:9093,:9094";
-	private static final String GROUP_ID = "ex";
-	private final static String OFFSET_RESET = "earliest";
+	private static final Logger LOG = LoggerFactory.getLogger(SlowConsumer.class);
 
+	private static final String BOOTSTRAP_SERVERS = ":9092,:9093,:9094";
+	private static final String GROUP_ID = "ex";
+	private static final String OFFSET_RESET = "earliest";
+
+	@SuppressWarnings("boxing")
 	public static void main(String[] args) {
 		Properties props = new Properties();
 		props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
@@ -30,19 +34,18 @@ public class SlowConsumer {
 		props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
 		props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, IntegerDeserializer.class.getName());
 		props.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, 5000);
-		final KafkaConsumer<String, Integer> consumer = new KafkaConsumer<>(props);
 
-		try {
+		try (KafkaConsumer<String, Integer> consumer = new KafkaConsumer<>(props)) {
 			consumer.subscribe(Collections.singleton(args[0]), new ConsumerRebalanceListener() {
 
 				@Override
 				public void onPartitionsRevoked(Collection<TopicPartition> partitions) {
-					System.out.printf("onPartitionsRevoked - partitions: %s%n", formatPartitions(partitions));
+					LOG.info("onPartitionsRevoked - partitions:{}", formatPartitions(partitions));
 				}
 
 				@Override
 				public void onPartitionsAssigned(Collection<TopicPartition> partitions) {
-					System.out.printf("onPartitionsAssigned - partitions: %s%n", formatPartitions(partitions));
+					LOG.info("onPartitionsAssigned - partitions: {}", formatPartitions(partitions));
 
 				}
 			});
@@ -50,23 +53,22 @@ public class SlowConsumer {
 				ConsumerRecords<String, Integer> records = consumer.poll(Duration.ofSeconds(2));
 				if (!records.isEmpty()) {
 					for (ConsumerRecord<String, Integer> data : records) {
-						System.out.printf("key=%s, value=%s => partition=%d, offset=%d\n", data.key(), data.value(),
-								data.partition(), data.offset());
+						LOG.info("key = {}, value = {} => partition = {}, offset= {}", data.key(), data.value(), data.partition(), data.offset());
 					}
-					if (Boolean.valueOf(args[1])) {
+					if (Boolean.parseBoolean(args[1])) {
 						Thread.sleep(Integer.MAX_VALUE);
 					}
 				}
 			}
 		} catch (Exception e) {
-			System.out.printf("Exception %s\n", e.getMessage());
-		} finally {
-			consumer.close();
+			LOG.error("Something goes wrong: {}", e.getMessage(), e);
 		}
 	}
 
-	public static List<String> formatPartitions(Collection<TopicPartition> partitions) {
-		return partitions.stream().map(topicPartition -> String.format("topic: %s, partition: %s",
-				topicPartition.topic(), topicPartition.partition())).collect(Collectors.toList());
+	@SuppressWarnings("boxing")
+	public static String formatPartitions(Collection<TopicPartition> partitions) {
+		return partitions.stream()
+			.map(topicPartition -> String.format("topic: %s, partition: %s", topicPartition.topic(), topicPartition.partition()))
+			.collect(Collectors.joining(", ", "[", "]"));
 	}
 }

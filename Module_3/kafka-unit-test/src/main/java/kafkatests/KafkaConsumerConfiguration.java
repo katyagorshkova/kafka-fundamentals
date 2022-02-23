@@ -1,6 +1,5 @@
 package kafkatests;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -20,12 +19,12 @@ public class KafkaConsumerConfiguration {
 
 	@Bean
 	public ConsumerFactory<String, String> consumerFactory() {
-		Map<String, Object> props = new HashMap<>();
-		props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-		props.put(ConsumerConfig.GROUP_ID_CONFIG, "myGroup");
-		props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-		props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-		props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+		Map<String, Object> props = Map.of(
+			ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers,
+			ConsumerConfig.GROUP_ID_CONFIG, "myGroup",
+			ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class,
+			ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class,
+			ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 		return new DefaultKafkaConsumerFactory<>(props);
 	}
 

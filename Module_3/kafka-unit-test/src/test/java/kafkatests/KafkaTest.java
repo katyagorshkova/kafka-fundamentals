@@ -1,16 +1,16 @@
 package kafkatests;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.kafka.test.context.EmbeddedKafka;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
-public class KafkaTest {
+@EmbeddedKafka(partitions = 5, topics = { "topic1" })
+class KafkaTest {
 
 	@Test
-	public void contextLoads() {
+	void contextLoads() {
+		// nothing
 	}
 
 }

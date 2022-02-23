@@ -11,14 +11,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class KafkaMessageConsumerService {
 
-	private static final Logger log = LoggerFactory.getLogger(KafkaMessageConsumerService.class);
+	private static final Logger LOG = LoggerFactory.getLogger(KafkaMessageConsumerService.class);
 
+	@SuppressWarnings({ "static-method", "unused" })
 	@KafkaListener(topics = "topic2")
 	public void onMessage(@Payload String msg,
-            @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
-            @Header(KafkaHeaders.RECEIVED_PARTITION_ID) Integer partition,
-            @Header(KafkaHeaders.OFFSET) Long offset) {
-		System.out.print("bubu===" + msg);
-			log.info(msg);
+		@Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
+		@Header(KafkaHeaders.RECEIVED_PARTITION_ID) Integer partition,
+		@Header(KafkaHeaders.OFFSET) Long offset) {
+		LOG.info("Message consumed {}", msg);
 	}
 }
