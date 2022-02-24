@@ -36,8 +36,8 @@ public class TransactionalProducer {
 		try (Producer<String, String> producer = new KafkaProducer<>(props)) {
 			producer.initTransactions();
 			producer.beginTransaction();
-			final ProducerRecord<String, String> data1 = new ProducerRecord<>(TOPIC1, "m3");
-			final ProducerRecord<String, String> data2 = new ProducerRecord<>(TOPIC2, "m4");
+			final ProducerRecord<String, String> data1 = new ProducerRecord<>(TOPIC1, "m1");
+			final ProducerRecord<String, String> data2 = new ProducerRecord<>(TOPIC2, "m2");
 			try {
 				RecordMetadata meta1 = producer.send(data1).get();
 				LOG.info("key = {}, value = {} => partition = {}, offset= {}", data1.key(), data1.value(), meta1.partition(), meta1.offset());
