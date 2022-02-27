@@ -1,4 +1,4 @@
-package examples.streams;
+package com.luxoft.eas026.streams;
 
 import java.io.IOException;
 import java.util.Properties;

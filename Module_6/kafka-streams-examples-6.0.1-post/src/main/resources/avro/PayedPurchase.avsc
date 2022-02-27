@@ -1,0 +1,19 @@
+{
+  "namespace": "com.luxoft.eas026.streams",
+  "type": "record",
+  "name": "PayedPurchase",
+  "fields": [
+    {
+      "name": "paymentId",
+      "type": "int"
+    },
+    {
+      "name": "purchaseId",
+      "type": "int"
+    },
+    {
+      "name": "product",
+      "type": "string"
+    }
+  ]
+}
