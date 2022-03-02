@@ -40,6 +40,7 @@ public class UpperCaseProcessorExample {
 		topology.addSink("sink-node", "UpperTextLineProcessor", stringSerde.serializer(), stringSerde.serializer(),
 				"uppercase-node");
 
+		System.out.println(topology.describe());
 		final KafkaStreams streams = new KafkaStreams(topology, streamsConfiguration);
 		streams.cleanUp();
 		streams.start();

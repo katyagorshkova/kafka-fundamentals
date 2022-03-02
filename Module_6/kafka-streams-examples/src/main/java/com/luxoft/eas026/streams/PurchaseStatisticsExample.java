@@ -34,14 +34,14 @@ public class PurchaseStatisticsExample {
 
 		final StreamsBuilder builder = new StreamsBuilder();
 
-		final KStream<Integer, Purchase> numbers = builder.stream("Purchases");
+		final KStream<Integer, Purchase> purchases = builder.stream("Purchases");
 
 		final Serde<Purchase> specificAvroSerde = new SpecificAvroSerde<>();
 		final boolean isKeySerde = false;
 		specificAvroSerde.configure(Collections.singletonMap(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG,
 				SCHEMA_REGISTRY_URL), isKeySerde);
 
-		numbers.groupBy((key, value) -> value.getProduct().toString(),
+		purchases.groupBy((key, value) -> value.getProduct().toString(),
 				Grouped.with(Serdes.String(), specificAvroSerde)).count().toStream()
 				.to("PurchaseStatistics", Produced.with(Serdes.String(), Serdes.Long()));
 

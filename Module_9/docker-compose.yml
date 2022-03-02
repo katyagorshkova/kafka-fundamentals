@@ -28,7 +28,6 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_DEFAULT_REPLICATION_FACTOR: 1
       KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
-      KAFKA_JMX_PORT: 9101
       KAFKA_JMX_HOSTNAME: kafka1-m
     volumes:
        - ./config:/tmp/config
@@ -62,8 +61,6 @@ services:
       KAFKA_DEFAULT_REPLICATION_FACTOR: 1
       KAFKA_BROKER_ID: 1
       KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
-      KAFKA_JMX_PORT: 9101
-      KAFKA_JMX_HOSTNAME: kafka1
     depends_on:
       - zoo1
 

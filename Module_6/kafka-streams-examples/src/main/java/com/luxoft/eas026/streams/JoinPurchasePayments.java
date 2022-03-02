@@ -19,7 +19,7 @@ import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde;
 
 public class JoinPurchasePayments {
 
-	public static final String SCHEMA_REGISTRY_URL="http://localhost:8081";
+	public static final String SCHEMA_REGISTRY_URL = "http://localhost:8081";
 
 	public static void main(final String[] args) throws Exception {
 		final Properties streamsConfiguration = new Properties();
@@ -33,25 +33,26 @@ public class JoinPurchasePayments {
 		streamsConfiguration.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, SpecificAvroSerde.class);
 		streamsConfiguration.put(StreamsConfig.STATE_DIR_CONFIG, "/tmp/streams/");
 		streamsConfiguration.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, SCHEMA_REGISTRY_URL);
-		
+
 		final StreamsBuilder builder = new StreamsBuilder();
 
 		final KStream<Integer, Purchase> purchases = builder.stream("Purchases");
 		final KStream<Integer, Payment> payments = builder.stream("Payments");
-		
 
 		final boolean isKeySerde = false;
-		Map<String,String> map = Collections.singletonMap(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG,
+		Map<String, String> map = Collections.singletonMap(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG,
 				SCHEMA_REGISTRY_URL);
-		
+
 		final Serde<Purchase> purchaseAvroSerde = new SpecificAvroSerde<>();
 		purchaseAvroSerde.configure(map, isKeySerde);
-		
+
 		final Serde<Payment> paymentAvroSerde = new SpecificAvroSerde<>();
 		paymentAvroSerde.configure(map, isKeySerde);
-		
-		final KStream<Integer, PayedPurchase> joined = purchases.join(payments.selectKey((k,v)->v.getPurchaseId()),
-				(purchase, payment) -> PayedPurchase.newBuilder().setPaymentId(payment.getId()).setPurchaseId(payment.getPurchaseId()).setProduct(purchase.getProduct()).build(), /* ValueJoiner */
+
+		final KStream<Integer, PayedPurchase> joined = purchases.join(payments.selectKey((k, v) -> v.getPurchaseId()),
+				(purchase, payment) -> PayedPurchase
+						.newBuilder().setPaymentId(payment.getId()).setPurchaseId(payment.getPurchaseId())
+						.setProduct(purchase.getProduct()).build(), /* ValueJoiner */
 				JoinWindows.of(Duration.ofDays(1)), StreamJoined.with(Serdes.Integer(), /* key */
 						purchaseAvroSerde, /* left value */
 						paymentAvroSerde) /* right value */
