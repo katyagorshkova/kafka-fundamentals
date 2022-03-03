@@ -148,7 +148,6 @@ services:
       - kafka1
       - kafka2
       - kafka3
-      - schema-registry
 
 volumes:
   zoo1-m5-data:
