@@ -18,13 +18,14 @@ public class MapFunctionLambdaDriver {
 		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
 		props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
 		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-		final KafkaProducer<String, String> producer = new KafkaProducer<>(props);
+	
+		try (final KafkaProducer<String, String> producer = new KafkaProducer<>(props)) {
 
-		for (final String industry : industries) {
-			producer.send(new ProducerRecord<>("TextLinesTopic", null, industry));
-			producer.flush();
+			for (final String industry : industries) {
+				producer.send(new ProducerRecord<>("TextLinesTopic", null, industry));
+				producer.flush();
+			}
 		}
-		producer.close();
 	}
 
 }

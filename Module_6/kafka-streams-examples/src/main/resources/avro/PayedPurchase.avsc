@@ -5,11 +5,11 @@
   "fields": [
     {
       "name": "paymentId",
-      "type": "int"
+      "type": "long"
     },
     {
       "name": "purchaseId",
-      "type": "int"
+      "type": "long"
     },
     {
       "name": "product",

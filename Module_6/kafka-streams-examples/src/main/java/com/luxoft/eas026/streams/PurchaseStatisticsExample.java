@@ -27,14 +27,14 @@ public class PurchaseStatisticsExample {
 
 		streamsConfiguration.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
 
-		streamsConfiguration.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.Integer().getClass().getName());
+		streamsConfiguration.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
 		streamsConfiguration.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, SpecificAvroSerde.class);
 		streamsConfiguration.put(StreamsConfig.STATE_DIR_CONFIG, "/tmp/streams/");
 		streamsConfiguration.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, SCHEMA_REGISTRY_URL);
 
 		final StreamsBuilder builder = new StreamsBuilder();
 
-		final KStream<Integer, Purchase> purchases = builder.stream("Purchases");
+		final KStream<String, Purchase> purchases = builder.stream("Purchases");
 
 		final Serde<Purchase> specificAvroSerde = new SpecificAvroSerde<>();
 		final boolean isKeySerde = false;
@@ -42,8 +42,8 @@ public class PurchaseStatisticsExample {
 				SCHEMA_REGISTRY_URL), isKeySerde);
 
 		purchases.groupBy((key, value) -> value.getProduct().toString(),
-				Grouped.with(Serdes.String(), specificAvroSerde)).count().toStream()
-				.to("PurchaseStatistics", Produced.with(Serdes.String(), Serdes.Long()));
+				Grouped.with(Serdes.String(), specificAvroSerde)).count().mapValues(v->v.toString()).toStream()
+				.to("PurchaseStatistics", Produced.with(Serdes.String(), Serdes.String()));
 
 		final KafkaStreams streams = new KafkaStreams(builder.build(), streamsConfiguration);
 		streams.cleanUp();

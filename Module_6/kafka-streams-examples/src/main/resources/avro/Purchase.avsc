@@ -5,7 +5,7 @@
   "fields": [
     {
       "name": "id",
-      "type": "int"
+      "type": "long"
     },
     {
       "name": "product",
@@ -13,7 +13,7 @@
     },
     {
       "name": "amount",
-      "type": "int"
+      "type": "long"
     },
     {
       "name": "sum",
@@ -21,7 +21,7 @@
     },
     {
       "name": "customerId",
-      "type": "int"
+      "type": "long"
     }
   ]
 }

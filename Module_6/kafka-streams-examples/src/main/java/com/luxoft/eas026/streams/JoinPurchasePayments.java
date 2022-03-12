@@ -29,15 +29,15 @@ public class JoinPurchasePayments {
 
 		streamsConfiguration.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
 
-		streamsConfiguration.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.Integer().getClass().getName());
+		streamsConfiguration.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
 		streamsConfiguration.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, SpecificAvroSerde.class);
 		streamsConfiguration.put(StreamsConfig.STATE_DIR_CONFIG, "/tmp/streams/");
 		streamsConfiguration.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, SCHEMA_REGISTRY_URL);
 
 		final StreamsBuilder builder = new StreamsBuilder();
 
-		final KStream<Integer, Purchase> purchases = builder.stream("Purchases");
-		final KStream<Integer, Payment> payments = builder.stream("Payments");
+		final KStream<String, Purchase> purchases = builder.stream("Purchases");
+		final KStream<String, Payment> payments = builder.stream("Payments");
 
 		final boolean isKeySerde = false;
 		Map<String, String> map = Collections.singletonMap(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG,
@@ -49,11 +49,11 @@ public class JoinPurchasePayments {
 		final Serde<Payment> paymentAvroSerde = new SpecificAvroSerde<>();
 		paymentAvroSerde.configure(map, isKeySerde);
 
-		final KStream<Integer, PayedPurchase> joined = purchases.join(payments.selectKey((k, v) -> v.getPurchaseId()),
+		final KStream<String, PayedPurchase> joined = purchases.join(payments.selectKey((k, v) -> String.valueOf(v.getPurchaseId())),
 				(purchase, payment) -> PayedPurchase
 						.newBuilder().setPaymentId(payment.getId()).setPurchaseId(payment.getPurchaseId())
 						.setProduct(purchase.getProduct()).build(), /* ValueJoiner */
-				JoinWindows.of(Duration.ofDays(1)), StreamJoined.with(Serdes.Integer(), /* key */
+				JoinWindows.of(Duration.ofDays(1)), StreamJoined.with(Serdes.String(), /* key */
 						purchaseAvroSerde, /* left value */
 						paymentAvroSerde) /* right value */
 		);
