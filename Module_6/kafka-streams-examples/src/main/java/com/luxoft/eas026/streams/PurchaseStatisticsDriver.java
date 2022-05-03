@@ -30,7 +30,7 @@ public class PurchaseStatisticsDriver {
 			for (int j = 0; j < 10; j++) {
 				final String product = products[new Random().nextInt(products.length)];
 				final int customer = new Random().nextInt(3);
-				Purchase purchase = Purchase.newBuilder().setId(id++).setProduct(product).setAmount(1).setSum(10)
+				Purchase purchase = Purchase.newBuilder().setId(++id).setProduct(product).setAmount(1).setSum(10)
 						.setCustomerId(customer).build();
 				producer.send(new ProducerRecord<>("Purchases", String.valueOf(id), purchase));
 
