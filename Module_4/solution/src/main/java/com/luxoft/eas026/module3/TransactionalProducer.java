@@ -8,6 +8,7 @@ import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
+import org.apache.kafka.common.serialization.IntegerSerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,14 +31,14 @@ public class TransactionalProducer {
 		props.put(ProducerConfig.ACKS_CONFIG, "all");
 		props.put(ProducerConfig.LINGER_MS_CONFIG, 0);
 		props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, IntegerSerializer.class.getName());
 		props.put(ProducerConfig.TRANSACTIONAL_ID_CONFIG, "my.id");
 
-		try (Producer<String, String> producer = new KafkaProducer<>(props)) {
+		try (Producer<String, Integer> producer = new KafkaProducer<>(props)) {
 			producer.initTransactions();
 			producer.beginTransaction();
-			final ProducerRecord<String, String> data1 = new ProducerRecord<>(TOPIC1, "m1");
-			final ProducerRecord<String, String> data2 = new ProducerRecord<>(TOPIC2, "m2");
+			final ProducerRecord<String, Integer> data1 = new ProducerRecord<>(TOPIC1, 100);
+			final ProducerRecord<String, Integer> data2 = new ProducerRecord<>(TOPIC2, 200);
 			try {
 				RecordMetadata meta1 = producer.send(data1).get();
 				LOG.info("key = {}, value = {} => partition = {}, offset= {}", data1.key(), data1.value(), meta1.partition(), meta1.offset());
