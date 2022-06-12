@@ -95,7 +95,7 @@ services:
       KSQL_AUTO_OFFSET_RESET: "earliest"
       CONNECT_HOST: ksqldb-server
     depends_on:
-      - zoookeeper
+      - zookeeper
       - kafka
       
   ksqldb-cli:
