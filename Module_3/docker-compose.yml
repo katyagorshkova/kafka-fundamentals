@@ -3,7 +3,7 @@ version: '3.7'
 services:
 
   zoo:
-    image: zookeeper:3.7.0
+    image: zookeeper:3.8.0
     restart: always
     hostname: zookeeper
     container_name: zookeeper
@@ -18,7 +18,7 @@ services:
       - zoo-datalog:/datalog
 
   kafka:
-    image: confluentinc/cp-kafka:7.0.1
+    image: confluentinc/cp-kafka:7.2.1
     hostname: kafka
     container_name: kafka
     volumes:
@@ -45,7 +45,7 @@ services:
       - 9092:9092
 
   schema-registry:
-    image: confluentinc/cp-schema-registry:7.0.1
+    image: confluentinc/cp-schema-registry:7.2.1
     hostname: schema-registry
     container_name: schema-registry
     depends_on:
@@ -59,7 +59,7 @@ services:
       - 8085:8085
 
   rest-proxy:
-    image: confluentinc/cp-kafka-rest:7.0.1
+    image: confluentinc/cp-kafka-rest:7.2.1
     hostname: rest-proxy
     container_name: rest-proxy
     depends_on:
@@ -78,7 +78,7 @@ services:
   akhq:
     # build:
     #   context: .
-    image: tchiotludo/akhq:0.20.0
+    image: tchiotludo/akhq:0.22.0
     container_name: akhq
     environment:
       AKHQ_CONFIGURATION: |
@@ -100,7 +100,7 @@ services:
       - schema-registry
 
   control-center:
-    image: confluentinc/cp-enterprise-control-center:7.0.1
+    image: confluentinc/cp-enterprise-control-center:7.2.1
     hostname: control-center
     container_name: control-center
     depends_on:
@@ -118,7 +118,7 @@ services:
       - 9021:9021
 
   kafdrop:
-    image: obsidiandynamics/kafdrop:3.28.0
+    image: obsidiandynamics/kafdrop:3.30.0
     container_name: kafdrop
     depends_on:
       - kafka
@@ -128,7 +128,7 @@ services:
       KAFKA_BROKERCONNECT: kafka:19092
 
   kafka-ui:
-    image: provectuslabs/kafka-ui:0.3.2
+    image: provectuslabs/kafka-ui:master
     container_name: kafka-ui
     ports:
       - "8090:8080"
@@ -139,7 +139,7 @@ services:
       - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
 
   kafkacat:
-    image: confluentinc/cp-kafkacat:7.0.1
+    image: confluentinc/cp-kafkacat:7.1.4.arm64
     container_name: kafkacat
     depends_on:
       - kafka

@@ -3,7 +3,7 @@ version: '2'
 services:
 
   zookeeper:
-    image: zookeeper:3.7.0
+    image: zookeeper:3.8.0
     restart: always
     hostname: zookeeper
     container_name: zookeeper
@@ -14,7 +14,7 @@ services:
         ZOO_PORT: 2181
 
   kafka:
-    image: confluentinc/cp-kafka:7.0.1
+    image: confluentinc/cp-kafka:7.2.1
     hostname: kafka
     container_name: kafka
     depends_on:
@@ -34,7 +34,7 @@ services:
       KAFKA_CONFLUENT_SCHEMA_REGISTRY_URL: http://schema-registry:8081
 
   schema-registry:
-    image: confluentinc/cp-schema-registry:7.0.1
+    image: confluentinc/cp-schema-registry:7.2.1
     hostname: schema-registry
     container_name: schema-registry
     depends_on:
@@ -47,7 +47,7 @@ services:
       SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
 
   control-center:
-    image: confluentinc/cp-enterprise-control-center:7.0.1
+    image: confluentinc/cp-enterprise-control-center:7.2.1
     hostname: control-center
     container_name: control-center
     depends_on:
@@ -65,7 +65,7 @@ services:
       PORT: 9021
 
   rest-proxy:
-    image: confluentinc/cp-kafka-rest:7.0.1
+    image: confluentinc/cp-kafka-rest:7.2.1
     depends_on:
       - kafka
       - schema-registry
@@ -82,7 +82,7 @@ services:
   akhq:
     # build:
     #   context: .
-    image: tchiotludo/akhq:0.20.0
+    image: tchiotludo/akhq:0.22.0
     container_name: akhq
     environment:
       AKHQ_CONFIGURATION: |
