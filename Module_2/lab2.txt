@@ -50,3 +50,25 @@ k9,v9
 k10,v10
 
 Check that messages come to different consumers
+
+7. List all the consumer groups
+
+docker exec -ti kafka1 /usr/bin/kafka-consumer-groups  --bootstrap-server kafka1:19092,kafka2:19093,kafka3:19094 --list
+
+8. Describe consumer group
+
+docker exec -ti kafka1 /usr/bin/kafka-consumer-groups  --bootstrap-server kafka1:19092,kafka2:19093,kafka3:19094 --group cons1 --describe
+
+This command shows lag, which is the most important information about consumer group.
+
+9. Kill consumer and send some messages.
+
+docker exec -ti kafka1 /usr/bin/kafka-consumer-groups  --bootstrap-server kafka1:19092,kafka2:19093,kafka3:19094 --group cons1 --describe
+
+This command shows positive lag.
+
+10. Check if there is some data in topics
+
+docker exec -ti kafka1 /usr/bin/kafka-run-class kafka.tools.GetOffsetShell --bootstrap-server kafka1:19092,kafka2:19093,kafka3:19094 --topic events1
+
+
