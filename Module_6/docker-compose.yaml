@@ -93,6 +93,7 @@ services:
       KSQL_KSQL_LOGGING_PROCESSING_TOPIC_AUTO_CREATE: "true"
       KSQL_KSQL_SERVICE_ID: "ksql-cluster"
       KSQL_AUTO_OFFSET_RESET: "earliest"
+      KSQL_KSQL_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
       CONNECT_HOST: ksqldb-server
     depends_on:
       - zookeeper
