@@ -1,0 +1,43 @@
+1. Create topic with replication factor 2
+
+docker exec -ti kafka1 /usr/bin/kafka-topics --create  --bootstrap-server kafka1:19092,kafka2:19093,kafka3:19094 --replication-factor 2 --partitions 4 --topic events_rep2
+
+
+2. Create performance test with acks=all
+
+docker exec -ti kafka1  /usr/bin/kafka-producer-perf-test --topic events_rep2 --throughput -1 --num-records 100000 --record-size 1024 --producer-props acks=all bootstrap.servers=kafka1:19092,kafka2:19093,kafka3:19094 
+
+3. Check kafka_server_brokertopicmetrics_bytesin_total metrics
+
+4. Check leaders and replicas
+
+docker exec -ti kafka1 /usr/bin/kafka-topics --describe  --bootstrap-server kafka1:19092,kafka2:19093,kafka3:19094
+
+5. Kill one broker 
+
+
+6. Check leaders and replicas
+
+7. Create a file in the kafka
+
+{"topics": [{"topic": "events_rep2"}],
+  "version":1
+  }
+
+7. Generate partition reassignment
+
+docker exec -ti kafka1 /usr/bin/kafka-reassign-partitions --bootstrap-server kafka1:19092,kafka2:19093,kafka3:19094 --topics-to-move-json-file /tmp/topics.json --generate --broker-list 1,2,3
+
+8. Execute reassignment
+
+docker exec -ti kafka1 /usr/bin/kafka-reassign-partitions --bootstrap-server kafka1:19092,kafka2:19093,kafka3:19094 --reassignment-json-file /tmp/reassignment.json --execute
+
+
+9. Start killed broker
+
+10. Reassign partitions again
+
+11. Prefer leader election
+
+docker exec -ti kafka1 /usr/bin/kafka-leader-election --bootstrap-server kafka1:19092,kafka2:19093,kafka3:19094  --election-type PREFERRED --all-topic-partitions
+
